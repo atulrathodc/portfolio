@@ -1,0 +1,675 @@
+/* ==========================================================================
+   parallax3d.css
+   3-D layered parallax background for the portfolio.
+
+   Loaded AFTER style.css / responsive.css so it only overrides what it needs.
+   - #p3d-stage is a FIXED, full-viewport, pointer-events:none stage at
+     z-index:-1 -> it paints above the canvas background but BEHIND every
+     piece of real content, so nothing becomes unclickable.
+   - 5 layer wrappers (orbs / grid / stars / shapes / sparks) each carry their
+     own translateZ + parallax depth (set from data-depth by parallax3d.js).
+   - Idle motion lives in CSS keyframes on the INNER elements, while the
+     scroll/mouse driven transform lives on the layer wrapper -> they compose.
+   ========================================================================== */
+
+/* ---------------------------------------------
+   0. Dark canvas (theme: dark, premium, purple/blue)
+   html carries the canvas background so body can stay transparent and the
+   fixed stage remains visible through the whole document.
+--------------------------------------------- */
+html {
+    background: #05060f;
+    background-color: #05060f;
+}
+
+body {
+    background: transparent !important;
+    color: #43485c;
+}
+
+/* ---------------------------------------------
+   1. Stage + camera + layers
+--------------------------------------------- */
+.p3d-stage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+    -webkit-perspective-origin: 50% 42%;
+    perspective-origin: 50% 42%;
+    background:
+        radial-gradient(120% 85% at 50% -10%, #1a2456 0%, rgba(12, 18, 54, 0.55) 42%, rgba(5, 6, 15, 0) 72%),
+        radial-gradient(80% 60% at 86% 12%, rgba(182, 54, 255, 0.30) 0%, rgba(5, 6, 15, 0) 68%),
+        radial-gradient(70% 60% at 8% 78%, rgba(0, 204, 255, 0.20) 0%, rgba(5, 6, 15, 0) 70%),
+        linear-gradient(180deg, #070a1c 0%, #0a0f2c 45%, #05060f 100%);
+}
+
+.p3d-camera {
+    position: absolute;
+    top: -12%;
+    left: -12%;
+    width: 124%;
+    height: 124%;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+}
+
+/* Layers are 3x the camera tall and start one camera-height above it, so the
+   visible window is the band [28%, 72%] of the layer. Content lives in that
+   band and is duplicated at +50% => wrapping by one period is invisible. */
+.p3d-layer {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 300%;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    pointer-events: none;
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* static depth fallback (JS overrides inline while animating) */
+.p3d-layer--orbs   { transform: translateZ(-900px); }
+.p3d-layer--grid   { transform: translateZ(-700px); }
+.p3d-layer--stars  { transform: translateZ(-500px); }
+.p3d-layer--shapes { transform: translateZ(-220px); }
+.p3d-layer--sparks { transform: translateZ(-60px);  }
+
+/* ---------------------------------------------
+   2. Glowing orbs (far depth)
+--------------------------------------------- */
+.p3d-orb {
+    position: absolute;
+    display: block;
+    border-radius: 50%;
+    -webkit-filter: blur(34px);
+    filter: blur(34px);
+    mix-blend-mode: screen;
+    pointer-events: none;
+    animation: p3d-orb-drift 26s ease-in-out infinite alternate,
+               p3d-orb-pulse 12s ease-in-out infinite;
+}
+
+.p3d-orb--1 {
+    width: 46vmax;
+    height: 46vmax;
+    left: -10vmax;
+    top: 34%;
+    background: radial-gradient(circle at 42% 42%, rgba(182, 54, 255, 0.85) 0%, rgba(122, 32, 220, 0.28) 45%, rgba(182, 54, 255, 0) 70%);
+    animation-duration: 26s, 12s;
+}
+
+.p3d-orb--2 {
+    width: 40vmax;
+    height: 40vmax;
+    right: -8vmax;
+    top: 40%;
+    background: radial-gradient(circle at 55% 45%, rgba(0, 204, 255, 0.75) 0%, rgba(0, 108, 255, 0.22) 48%, rgba(0, 204, 255, 0) 72%);
+    animation-duration: 31s, 14s;
+    animation-delay: -6s, -3s;
+}
+
+.p3d-orb--3 {
+    width: 36vmax;
+    height: 36vmax;
+    left: 26%;
+    top: 52%;
+    background: radial-gradient(circle at 50% 50%, rgba(212, 0, 212, 0.62) 0%, rgba(110, 0, 170, 0.20) 50%, rgba(212, 0, 212, 0) 72%);
+    animation-duration: 36s, 16s;
+    animation-delay: -12s, -7s;
+}
+
+@keyframes p3d-orb-drift {
+    0%   { transform: translate3d(0, 0, 0) scale(1); }
+    50%  { transform: translate3d(3vmax, -2.4vmax, 0) scale(1.08); }
+    100% { transform: translate3d(-2.6vmax, 2vmax, 0) scale(0.96); }
+}
+
+@keyframes p3d-orb-pulse {
+    0%, 100% { opacity: 0.42; }
+    50%      { opacity: 0.72; }
+}
+
+/* ---------------------------------------------
+   3. Wireframe grid floor (mid depth)
+--------------------------------------------- */
+.p3d-grid-floor {
+    position: absolute;
+    left: -60%;
+    top: 56%;
+    width: 220%;
+    height: 34%;
+    display: block;
+    pointer-events: none;
+    background-image:
+        linear-gradient(to right, rgba(150, 120, 255, 0.34) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(120, 90, 255, 0.26) 1px, transparent 1px);
+    background-size: 90px 90px, 90px 90px;
+    background-position: 0 0, 0 0;
+    -webkit-transform: rotateX(74deg) translateZ(-120px);
+    transform: rotateX(74deg) translateZ(-120px);
+    -webkit-transform-origin: 50% 100%;
+    transform-origin: 50% 100%;
+    animation: p3d-grid-run 9s linear infinite;
+    -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.35) 45%, rgba(0, 0, 0, 0) 78%);
+    mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.35) 45%, rgba(0, 0, 0, 0) 78%);
+}
+
+@keyframes p3d-grid-run {
+    from { background-position: 0 0, 0 0; }
+    to   { background-position: 0 90px, 0 90px; }
+}
+
+/* ---------------------------------------------
+   4. Star field + near sparks (JS generated)
+--------------------------------------------- */
+.p3d-star {
+    position: absolute;
+    display: block;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 6px rgba(214, 222, 255, 0.9), 0 0 14px rgba(140, 120, 255, 0.5);
+    pointer-events: none;
+    animation: p3d-twinkle 5s ease-in-out infinite;
+}
+
+@keyframes p3d-twinkle {
+    0%, 100% { opacity: 0.18; transform: scale(0.7); }
+    50%      { opacity: 1;    transform: scale(1); }
+}
+
+.p3d-spark {
+    position: absolute;
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffffff 0%, rgba(182, 54, 255, 0.8) 45%, rgba(182, 54, 255, 0) 72%);
+    -webkit-filter: blur(0.4px);
+    filter: blur(0.4px);
+    pointer-events: none;
+    animation: p3d-spark-float 15s ease-in-out infinite;
+}
+
+@keyframes p3d-spark-float {
+    0%   { opacity: 0;   transform: translate3d(0, 40px, 0) scale(0.6); }
+    25%  { opacity: 0.9; }
+    75%  { opacity: 0.75; }
+    100% { opacity: 0;   transform: translate3d(18px, -90px, 0) scale(1.15); }
+}
+
+/* ---------------------------------------------
+   5. Floating geometric shapes (near depth)
+--------------------------------------------- */
+.p3d-shape {
+    position: absolute;
+    display: block;
+    pointer-events: none;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}
+
+.p3d-shape--ring {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    border: 2px solid rgba(182, 54, 255, 0.55);
+    box-shadow: 0 0 30px rgba(182, 54, 255, 0.35), inset 0 0 30px rgba(0, 204, 255, 0.22);
+    animation: p3d-spin 28s linear infinite;
+}
+
+.p3d-shape--ring1 { left: 7%;  top: 34%; }
+.p3d-shape--ring2 {
+    left: auto; right: 9%; top: 60%;
+    width: 110px; height: 110px;
+    border-color: rgba(0, 204, 255, 0.5);
+    box-shadow: 0 0 26px rgba(0, 204, 255, 0.3), inset 0 0 22px rgba(212, 0, 212, 0.2);
+    animation-duration: 20s;
+    animation-direction: reverse;
+}
+
+/* period duplicates (content repeated exactly +50% down the layer) */
+.p3d-shape--dup.p3d-shape--ring1 { top: 84%; }
+.p3d-shape--dup.p3d-shape--ring2 { top: 110%; }
+.p3d-shape--dup.p3d-shape--cube  { top: 92%; }
+.p3d-shape--dup.p3d-shape--tri   { top: 116%; }
+
+@keyframes p3d-spin {
+    0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
+    50%  { transform: translate3d(12px, -26px, 0) rotate(180deg); }
+    100% { transform: translate3d(0, 0, 0) rotate(360deg); }
+}
+
+.p3d-shape--cube {
+    left: 68%;
+    top: 42%;
+    width: 92px;
+    height: 92px;
+    animation: p3d-cube 32s linear infinite;
+}
+
+.p3d-shape--cube i {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px solid rgba(0, 204, 255, 0.48);
+    background: rgba(0, 204, 255, 0.05);
+    box-shadow: 0 0 24px rgba(0, 204, 255, 0.22);
+}
+
+.p3d-shape--cube i:nth-child(1) { transform: translateZ(46px); }
+.p3d-shape--cube i:nth-child(2) { transform: rotateY(90deg) translateZ(46px); }
+.p3d-shape--cube i:nth-child(3) { transform: rotateX(90deg) translateZ(46px); }
+
+@keyframes p3d-cube {
+    0%   { transform: rotateX(0deg) rotateY(0deg); }
+    100% { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+.p3d-shape--tri {
+    left: 16%;
+    top: 66%;
+    width: 0;
+    height: 0;
+    border-left: 62px solid transparent;
+    border-right: 62px solid transparent;
+    border-bottom: 100px solid rgba(212, 0, 212, 0.18);
+    -webkit-filter: drop-shadow(0 0 20px rgba(212, 0, 212, 0.5));
+    filter: drop-shadow(0 0 20px rgba(212, 0, 212, 0.5));
+    animation: p3d-tri 19s ease-in-out infinite;
+}
+
+@keyframes p3d-tri {
+    0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
+    50%  { transform: translate3d(20px, -34px, 0) rotate(24deg); }
+    100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+}
+
+/* ---------------------------------------------
+   6. Vignette (keeps sections readable)
+--------------------------------------------- */
+.p3d-vignette {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background:
+        radial-gradient(120% 100% at 50% 45%, rgba(0, 0, 0, 0) 38%, rgba(3, 4, 12, 0.55) 78%, rgba(2, 3, 9, 0.85) 100%),
+        linear-gradient(180deg, rgba(3, 4, 12, 0.7) 0%, rgba(3, 4, 12, 0) 20%, rgba(3, 4, 12, 0) 62%, rgba(2, 3, 9, 0.78) 100%);
+}
+
+/* ---------------------------------------------
+   7. Content panels — translucent "glass" so the 3-D stage
+      shows through while the (dark) copy stays high contrast.
+      Purely additive overrides: no structural edits.
+--------------------------------------------- */
+#welcome-hero,
+.about,
+.education,
+.skills,
+.experience,
+.profiles,
+.portfolio,
+.clients,
+.contact,
+footer#footer-copyright {
+    position: relative;
+    z-index: 1;
+}
+
+.about,
+.education,
+.skills,
+.experience,
+.profiles,
+.portfolio,
+.clients,
+.contact,
+footer#footer-copyright {
+    background: rgba(248, 250, 255, 0.89);
+    box-shadow: inset 0 1px 0 rgba(182, 54, 255, 0.16);
+}
+
+/* solid theme backgrounds -> translucent, so parallax reads through */
+.education { background: rgba(248, 250, 255, 0.89); }
+.contact   { background: rgba(248, 250, 255, 0.89); }
+
+/* ---------------------------------------------
+   8. Hero — ghost the banner so the 3-D stage is visible,
+      keep white hero copy at full contrast.
+--------------------------------------------- */
+.welcome-hero {
+    background: transparent;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.welcome-hero:before {
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background: url(../images/about/welcome-banner.jpg) no-repeat center center;
+    background-size: cover;
+    opacity: 0.26;
+}
+
+.welcome-hero:after {
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: linear-gradient(180deg,
+        rgba(7, 10, 26, 0.88) 0%,
+        rgba(11, 16, 44, 0.55) 42%,
+        rgba(6, 8, 22, 0.94) 100%);
+}
+
+.welcome-hero .container {
+    position: relative;
+    z-index: 2;
+}
+
+.header-text h2 {
+    text-shadow: 0 6px 34px rgba(0, 0, 0, 0.55);
+}
+
+.header-text p {
+    text-shadow: 0 4px 22px rgba(0, 0, 0, 0.6);
+}
+
+/* ---------------------------------------------
+   9. Chrome — premium translucent navbar (same colours/behaviour)
+--------------------------------------------- */
+nav.navbar.bootsnav,
+nav.navbar.bootsnav.no-background {
+    background-color: rgba(255, 255, 255, 0.93);
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
+    backdrop-filter: blur(10px) saturate(130%);
+}
+
+#footer-copyright .hm-footer-copyright p {
+    color: #6f7590;
+}
+
+/* ---------------------------------------------
+   10. Responsive — fewer/cheaper layers on small screens
+--------------------------------------------- */
+@media (max-width: 991px) {
+    .p3d-orb {
+        -webkit-filter: blur(24px);
+        filter: blur(24px);
+        animation-duration: 30s, 14s;
+    }
+
+    .p3d-shape--ring { width: 120px; height: 120px; }
+    .p3d-shape--cube { width: 70px; height: 70px; }
+    .p3d-shape--cube i:nth-child(1) { transform: translateZ(35px); }
+    .p3d-shape--cube i:nth-child(2) { transform: rotateY(90deg) translateZ(35px); }
+    .p3d-shape--cube i:nth-child(3) { transform: rotateX(90deg) translateZ(35px); }
+}
+
+@media (max-width: 767px) {
+    .p3d-layer--sparks { display: none; }
+    .p3d-orb--2 { display: none; }
+    .p3d-shape--cube { display: none; }
+    .p3d-shape--ring { width: 86px; height: 86px; }
+    .p3d-grid-floor {
+        background-size: 60px 60px, 60px 60px;
+        height: 70%;
+    }
+    @keyframes p3d-grid-run {
+        from { background-position: 0 0, 0 0; }
+        to   { background-position: 0 60px, 0 60px; }
+    }
+
+    /* stronger panels on phones so text stays crisp over the moving bg */
+    .about,
+    .education,
+    .skills,
+    .experience,
+    .profiles,
+    .portfolio,
+    .clients,
+    .contact,
+    footer#footer-copyright {
+        background: rgba(248, 250, 255, 0.94);
+    }
+
+    nav.navbar.bootsnav,
+    nav.navbar.bootsnav.no-background {
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+    }
+}
+
+/* ---------------------------------------------
+   11. Accessibility — freeze/simplify on request
+--------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    .p3d-stage *,
+    .p3d-stage *:before,
+    .p3d-stage *:after {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .p3d-camera {
+        transform: none !important;
+    }
+
+    .p3d-layer {
+        transform: none !important;
+    }
+}
+
+/* ==========================================================================
+   12. THEME HARMONISATION — "Midnight Aurora"
+   --------------------------------------------------------------------------
+   This file is linked LAST, so the palette and the section surfaces are
+   re-declared once here, at the end, to match the THEME OVERRIDE LAYER at the
+   end of style.css:
+     - stage/orbs/grid/shapes: magenta+blue -> cyan/violet (same geometry)
+     - section panels: near-white glass -> dark glass (the panels used to be
+       re-imposed as rgba(248,250,255,.89) here, which fought the dark theme)
+   Layer structure, depths, data-depth/data-z and the parallax3d.js contract
+   are untouched — this is colour only.
+   ========================================================================== */
+
+body {
+    color: #a7b0d0;
+}
+
+/* --- palette --- */
+.p3d-stage {
+    background:
+        radial-gradient(120% 85% at 50% -10%, #16204f 0%, rgba(12, 18, 54, 0.55) 42%, rgba(5, 6, 15, 0) 72%),
+        radial-gradient(80% 60% at 86% 12%, rgba(139, 92, 246, 0.32) 0%, rgba(5, 6, 15, 0) 68%),
+        radial-gradient(70% 60% at 8% 78%, rgba(34, 211, 238, 0.22) 0%, rgba(5, 6, 15, 0) 70%),
+        linear-gradient(180deg, #070a1c 0%, #0a0f2c 45%, #05060f 100%);
+}
+
+.p3d-orb--1 {
+    background: radial-gradient(circle at 42% 42%, rgba(139, 92, 246, 0.85) 0%, rgba(99, 60, 200, 0.28) 45%, rgba(139, 92, 246, 0) 70%);
+}
+
+.p3d-orb--2 {
+    background: radial-gradient(circle at 55% 45%, rgba(34, 211, 238, 0.75) 0%, rgba(56, 130, 255, 0.22) 48%, rgba(34, 211, 238, 0) 72%);
+}
+
+.p3d-orb--3 {
+    background: radial-gradient(circle at 50% 50%, rgba(217, 70, 239, 0.6) 0%, rgba(124, 44, 190, 0.2) 50%, rgba(217, 70, 239, 0) 72%);
+}
+
+.p3d-grid-floor {
+    background-image:
+        linear-gradient(to right, rgba(126, 152, 255, 0.32) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(94, 120, 255, 0.24) 1px, transparent 1px);
+}
+
+.p3d-spark {
+    background: radial-gradient(circle, #ffffff 0%, rgba(34, 211, 238, 0.85) 45%, rgba(139, 92, 246, 0) 72%);
+}
+
+.p3d-shape--ring {
+    border-color: rgba(34, 211, 238, 0.55);
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.35), inset 0 0 30px rgba(139, 92, 246, 0.24);
+}
+
+.p3d-shape--ring2 {
+    border-color: rgba(139, 92, 246, 0.5);
+    box-shadow: 0 0 26px rgba(139, 92, 246, 0.3), inset 0 0 22px rgba(217, 70, 239, 0.2);
+}
+
+.p3d-shape--cube i {
+    border-color: rgba(139, 92, 246, 0.48);
+    background: rgba(139, 92, 246, 0.06);
+    box-shadow: 0 0 24px rgba(139, 92, 246, 0.24);
+}
+
+.p3d-shape--tri {
+    border-bottom-color: rgba(34, 211, 238, 0.18);
+    -webkit-filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.5));
+    filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.5));
+}
+
+/* --- dark glass section surfaces (was a near-white sheet) --- */
+.about,
+.education,
+.skills,
+.experience,
+.profiles,
+.portfolio,
+.clients,
+.contact,
+footer#footer-copyright {
+    background: linear-gradient(180deg, rgba(14, 18, 44, 0.6), rgba(6, 8, 20, 0.72)) !important;
+    box-shadow: inset 0 1px 0 rgba(146, 160, 255, 0.12);
+}
+
+footer#footer-copyright {
+    background: rgba(4, 5, 13, 0.8) !important;
+}
+
+#footer-copyright .hm-footer-copyright p {
+    color: #7c86a8;
+}
+
+/* navbar: saturated white -> same glass as style.css */
+nav.navbar.bootsnav,
+nav.navbar.bootsnav.no-background {
+    background-color: rgba(8, 10, 24, 0.72);
+}
+
+/* hero: drop the banner photo, keep the 3-D stage + a legible scrim */
+.welcome-hero:before {
+    opacity: 1;
+    background: radial-gradient(70% 60% at 50% 6%, rgba(34, 211, 238, 0.18), rgba(5, 6, 15, 0) 62%);
+}
+
+.welcome-hero:after {
+    background: linear-gradient(180deg, rgba(5, 6, 15, 0.72) 0%, rgba(5, 6, 15, 0.3) 46%, rgba(5, 6, 15, 0.86) 100%);
+}
+
+@media (max-width: 767px) {
+    /* phones: slightly denser panels so copy stays crisp over the motion */
+    .about,
+    .education,
+    .skills,
+    .experience,
+    .profiles,
+    .portfolio,
+    .clients,
+    .contact,
+    footer#footer-copyright {
+        background: linear-gradient(180deg, rgba(12, 16, 40, 0.88), rgba(5, 6, 15, 0.94)) !important;
+    }
+}
+
+/* ==========================================================================
+   13. WEBGL STAGE — the "Astra" background (assets/js/astra3d.js)
+   --------------------------------------------------------------------------
+   #astra-stage is the primary renderer. It fills the existing .p3d-stage
+   wrapper, so the position:fixed / z-index:-1 / pointer-events:none contract
+   and the .p3d-vignette overlay (a later sibling -> paints on top) are both
+   preserved: the canvas can never intercept a click.
+
+   astra3d.js adds `p3d-webgl` to the stage once WebGL is live; if WebGL is
+   missing or the context is lost it removes the canvas and adds
+   `p3d-fallback-on`, which re-reveals the CSS layer stack below.
+   ========================================================================== */
+.astra-canvas,
+#astra-stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+    background: #05060f;
+    /* the renderer owns its own vignette/tonemap pass */
+    z-index: 0;
+}
+
+/* WebGL took over -> the CSS layers and the CSS stage gradients stand down */
+.p3d-stage.p3d-webgl {
+    background: #05060f;
+}
+
+.p3d-stage.p3d-webgl .p3d-camera {
+    display: none !important;
+}
+
+/* WebGL unavailable (or context lost) -> CSS parallax is the fallback */
+.p3d-stage.p3d-fallback-on .astra-canvas,
+.p3d-stage.p3d-fallback-on #astra-stage {
+    display: none !important;
+}
+
+/* Before any JS runs the canvas is empty, so keep the stage gradient visible
+   by never letting an un-initialised canvas cover it with pure black. */
+.p3d-stage:not(.p3d-webgl) #astra-stage {
+    background: transparent;
+}
+
+/* Copy legibility over the brighter WebGL render: a slightly softer scrim
+   than the CSS stage needed (the render already carries its own vignette). */
+.p3d-stage.p3d-webgl .p3d-vignette {
+    background:
+        radial-gradient(125% 105% at 50% 45%, rgba(0, 0, 0, 0) 42%, rgba(3, 4, 12, 0.42) 80%, rgba(2, 3, 9, 0.7) 100%),
+        linear-gradient(180deg, rgba(3, 4, 12, 0.55) 0%, rgba(3, 4, 12, 0) 22%, rgba(3, 4, 12, 0) 64%, rgba(2, 3, 9, 0.62) 100%);
+}
+
+/* Reduced motion: astra3d.js renders a single static frame - make sure no CSS
+   transition/animation is layered on top of it. */
+@media (prefers-reduced-motion: reduce) {
+    .astra-canvas,
+    #astra-stage {
+        animation: none !important;
+        transition: none !important;
+    }
+}

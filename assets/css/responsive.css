@@ -94,3 +94,74 @@
 	
 }/*max-width:320px*/
 
+/*==========================================================================
+  THEME OVERRIDE LAYER — responsive rules (see the block at the end of
+  style.css). Lives here so these win over style.css on small screens.
+==========================================================================*/
+
+@media screen and (max-width:992px){
+	/* collapsed menu panel: the dark re-skin must not leave a white sheet */
+	nav.navbar.bootsnav .navbar-collapse.collapse.in {
+		background: rgba(7, 9, 22, 0.98) !important;
+		border-top: 1px solid var(--border);
+		-webkit-backdrop-filter: blur(16px);
+		backdrop-filter: blur(16px);
+	}
+	nav.navbar.bootsnav ul.nav > li > a {
+		padding: 16px var(--sp-4) !important;
+		color: var(--text) !important;
+	}
+	/* the template hard-codes a 350px scroll box for the nav panel */
+	nav.navbar.bootsnav .menu-ui-design {
+		height: auto;
+		max-height: 70vh;
+	}
+	nav.navbar.bootsnav ul.nav > li > a::after {
+		left: var(--sp-4);
+		right: auto;
+		width: 32px;
+		bottom: 8px;
+	}
+	.welcome-hero {
+		padding: 130px 0 90px;
+	}
+}/*max-width:992px*/
+
+@media screen and (max-width:767px){
+	.header-text h2 {
+		letter-spacing: 0;
+	}
+	.hero-actions {
+		flex-direction: column;
+		align-items: stretch;
+	}
+	.header-text a {
+		width: 100% !important;
+	}
+	/* keep the profile tiles uniform (the template drops the border here) */
+	.single-profile {
+		border: 1px solid var(--border) !important;
+	}
+	.box {
+		width: min(24rem, 88vw);
+		height: min(24rem, 88vw);
+	}
+	.box::before {
+		inset: -1rem 6rem;
+	}
+	.section-heading h2 {
+		letter-spacing: 0.12em;
+	}
+	.single-contact-box {
+		padding-top: var(--sp-6);
+	}
+	#scroll-Top .return-to-top {
+		right: 20px;
+		bottom: 90px;
+	}
+	a.wa-cta {
+		right: 16px !important;
+		bottom: 16px !important;
+	}
+}/*max-width:767px*/
+

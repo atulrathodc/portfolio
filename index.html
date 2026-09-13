@@ -5,18 +5,22 @@
     <meta name="google-adsense-account" content="ca-pub-5119884908204834">
     <meta charset="utf-8" />
     <link rel="icon" href="/favicon.ico" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#05060f" />
     <meta name="description" content="Build your WebSite" />
     <link rel="apple-touch-icon" href="/logo192.png" />
     <link rel="manifest" href="/manifest.json" />
-    <script defer="defer" src="/static/js/main.71f31e0e.js"></script>
     <link href="/static/css/main.e6c13ad2.css" rel="stylesheet">
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <!--font-family-->
+    <!--font-family: design-system faces (Space Grotesk = display, Inter = body)-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap"
+        rel="stylesheet">
     <link
         href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&amp;subset=devanagari,latin-ext"
         rel="stylesheet">
@@ -52,6 +56,9 @@
     <!--responsive.css-->
     <link rel="stylesheet" href="assets/css/responsive.css">
 
+    <!--3D parallax background (layered depth stage: Midnight Aurora palette)-->
+    <link rel="stylesheet" href="assets/css/parallax3d.css">
+
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -64,11 +71,47 @@
 </head>
 
 <body><noscript>You need to enable JavaScript to run this app.</noscript>
+    <!-- 3D background stage: decorative only, pointer-events:none, behind all content.
+         Primary renderer: WebGL canvas (#astra-stage, assets/js/astra3d.js).
+         Fallback: the .p3d-camera layer stack driven by assets/js/parallax3d.js
+         (revealed by .p3d-stage.p3d-fallback-on when WebGL is unavailable). -->
+    <div id="p3d-stage" class="p3d-stage" aria-hidden="true">
+        <canvas id="astra-stage" class="astra-canvas" aria-hidden="true"></canvas>
+        <div class="p3d-camera">
+            <!-- depth 1/5 - distant glowing orbs -->
+            <div class="p3d-layer p3d-layer--orbs" data-depth="0.04" data-z="-900" data-nowrap="1">
+                <span class="p3d-orb p3d-orb--1"></span>
+                <span class="p3d-orb p3d-orb--2"></span>
+                <span class="p3d-orb p3d-orb--3"></span>
+            </div>
+            <!-- depth 2/5 - wireframe floor -->
+            <div class="p3d-layer p3d-layer--grid" data-depth="0.04" data-z="-700" data-nowrap="1">
+                <span class="p3d-grid-floor"></span>
+            </div>
+            <!-- depth 3/5 - star field (filled by parallax3d.js) -->
+            <div class="p3d-layer p3d-layer--stars" id="p3d-stars" data-depth="0.28" data-z="-500"></div>
+            <!-- depth 4/5 - floating geometry -->
+            <div class="p3d-layer p3d-layer--shapes" data-depth="0.5" data-z="-220">
+                <span class="p3d-shape p3d-shape--ring p3d-shape--ring1"></span>
+                <span class="p3d-shape p3d-shape--ring p3d-shape--ring2"></span>
+                <span class="p3d-shape p3d-shape--cube"><i></i><i></i><i></i></span>
+                <span class="p3d-shape p3d-shape--tri"></span>
+                <!-- exact period duplicates (+50% down the layer) keep the wrap invisible -->
+                <span class="p3d-shape p3d-shape--ring p3d-shape--ring1 p3d-shape--dup"></span>
+                <span class="p3d-shape p3d-shape--ring p3d-shape--ring2 p3d-shape--dup"></span>
+                <span class="p3d-shape p3d-shape--cube p3d-shape--dup"><i></i><i></i><i></i></span>
+                <span class="p3d-shape p3d-shape--tri p3d-shape--dup"></span>
+            </div>
+            <!-- depth 5/5 - nearest drifting sparks (filled by parallax3d.js) -->
+            <div class="p3d-layer p3d-layer--sparks" id="p3d-sparks" data-depth="0.85" data-z="-60"></div>
+        </div>
+        <div class="p3d-vignette"></div>
+    </div>
     <!-- <div id="root"></div> -->
     <!--[if lte IE 9]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
         <![endif]-->
-    <div id="cookie-consent-banner"
+    <div id="cookie-consent-banner" class="cookie-banner"
         style="position: fixed; bottom: 0; background: #f4f4f4; width: 100vw; padding: 15px; text-align: center; z-index: 9999;">
         <p style="margin: 0; font-size: 14px;">
             We use cookies to personalize content and ads, to provide social media features and to analyze our traffic.
@@ -108,7 +151,7 @@
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
                             <i class="fa fa-bars"></i>
                         </button>
-                        <a class="navbar-brand" href="index.html">Design Hunk</a>
+                        <a class="navbar-brand" href="index.html">portfolio.buildurgent.com</a>
                     </div><!--/.navbar-header-->
                     <!-- End Header Navigation -->
 
@@ -141,10 +184,15 @@
             <div class="row">
                 <div class="col-md-12 text-center">
                     <div class="header-text">
+                        <span class="hero-badge"><i class="fa fa-circle" aria-hidden="true"></i> available for
+                            freelance work</span>
                         <h2>hi <span>,</span> i am <br> Atul <br> Rathod <span>.</span> </h2>
                         <p>ui/ux designer and web developer</p>
-                        <a href="assets/download/AtulRathod_Java_developer_Resume.pdf" target="_blank" download>download
-                            resume</a>
+                        <div class="hero-actions">
+                            <a class="hero-cta" href="assets/download/AtulRathod_Java_developer_Resume.pdf"
+                                target="_blank" download>download resume</a>
+                            <a class="hero-cta hero-cta--ghost" href="#portfolio">view portfolio</a>
+                        </div><!--/.hero-actions-->
                     </div><!--/.header-text-->
                 </div><!--/.col-->
             </div><!-- /.row-->
@@ -194,13 +242,13 @@
                                     <div class="single-about-add-info">
                                         <h3>email</h3>
                                         <p>atulrathodc@gmail.com</p>
-                                        <p>sales@designhunk.com</p>
+                                        <p>sales@buildurgent.com</p>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="single-about-add-info">
                                         <h3>website</h3>
-                                        <p>designhunk.com</p>
+                                        <p>portfolio.buildurgent.com</p>
                                     </div>
                                 </div>
                             </div>
@@ -211,7 +259,7 @@
 
                             <div class="box">
                                 <div class="content">
-                                    <img src="assets/images/about/profile_image.png">
+                                    <img src="assets/images/about/profile_image.jpg" alt="Atul Rathod">
                                     <h2>Atul Rathod<br></h2>
                                     <span>Fullstack Developer/Designer</span>
                                     <a href="assets/download/AtulRathod_Java_developer_Resume.pdf" download
@@ -234,7 +282,7 @@
 											
 										</li>
 										<li>
-											<a target="_blank" href="https://www.linkedin.com/in/freelancer-atul-99bb58bb/">
+											<a target="_blank" href="https://www.linkedin.com/in/atul-rathod-99bb58bb/">
 												<i  class="fa fa-linkedin" aria-hidden="true"></i>
 											</a>
 										</li>
@@ -1059,33 +1107,85 @@
         </div>
         <div class="clients-area">
             <div class="container">
-                <div class="owl-carousel owl-theme" id="client">
+                <div class="client-3d" id="client3d" role="region" aria-roledescription="carousel"
+                    aria-label="Client showcase">
+                    <div class="client-3d__stage" id="client3dStage" tabindex="0">
 
-                    <div class="item">
-                        <a href="#">
-                            Interstate Batteries
-                        </a>
-                    </div>
-                    <div class="item">
-                        <a href="#">
-                            USC Portal
+                        <div class="client-3d__slide" role="group" aria-roledescription="slide"
+                            aria-label="1 of 6: Interstate Batteries">
+                            <a class="client-3d__tile" href="#">
+                                <span class="client-3d__glow" aria-hidden="true"></span>
+                                <span class="client-3d__mark" aria-hidden="true">IB</span>
+                                <span class="client-3d__name">Interstate Batteries</span>
+                                <span class="client-3d__meta">Energy &middot; Distribution</span>
+                            </a>
+                        </div>
 
-                        </a>
-                    </div>
-                    <div class="item">
-                        <a href="#">
-                            Eqexl
-                        </a>
-                    </div>
-                    <div class="item">
-                        <a href="#">
-                            Aerios Health
-                        </a>
-                    </div>
+                        <div class="client-3d__slide" role="group" aria-roledescription="slide"
+                            aria-label="2 of 6: USC Portal">
+                            <a class="client-3d__tile" href="#">
+                                <span class="client-3d__glow" aria-hidden="true"></span>
+                                <span class="client-3d__mark" aria-hidden="true">USC</span>
+                                <span class="client-3d__name">USC Portal</span>
+                                <span class="client-3d__meta">Education &middot; Platform</span>
+                            </a>
+                        </div>
 
-                </div>
-            </div><!--/.owl-carousel-->
-        </div><!--/.container-->
+                        <div class="client-3d__slide" role="group" aria-roledescription="slide"
+                            aria-label="3 of 6: Eqexl">
+                            <a class="client-3d__tile" href="#">
+                                <span class="client-3d__glow" aria-hidden="true"></span>
+                                <span class="client-3d__mark" aria-hidden="true">EQ</span>
+                                <span class="client-3d__name">Eqexl</span>
+                                <span class="client-3d__meta">Enterprise &middot; Cloud</span>
+                            </a>
+                        </div>
+
+                        <div class="client-3d__slide" role="group" aria-roledescription="slide"
+                            aria-label="4 of 6: Aerios Health">
+                            <a class="client-3d__tile" href="#">
+                                <span class="client-3d__glow" aria-hidden="true"></span>
+                                <span class="client-3d__mark" aria-hidden="true">AH</span>
+                                <span class="client-3d__name">Aerios Health</span>
+                                <span class="client-3d__meta">Health &middot; Data</span>
+                            </a>
+                        </div>
+
+                        <div class="client-3d__slide" role="group" aria-roledescription="slide"
+                            aria-label="5 of 6: Kite Mobility">
+                            <a class="client-3d__tile" href="#">
+                                <span class="client-3d__glow" aria-hidden="true"></span>
+                                <span class="client-3d__mark" aria-hidden="true">KM</span>
+                                <span class="client-3d__name">Kite Mobility</span>
+                                <span class="client-3d__meta">Mobility &middot; Apps</span>
+                            </a>
+                        </div>
+
+                        <div class="client-3d__slide" role="group" aria-roledescription="slide"
+                            aria-label="6 of 6: Vantage Realty">
+                            <a class="client-3d__tile" href="#">
+                                <span class="client-3d__glow" aria-hidden="true"></span>
+                                <span class="client-3d__mark" aria-hidden="true">VR</span>
+                                <span class="client-3d__name">Vantage Realty</span>
+                                <span class="client-3d__meta">Real Estate &middot; CRM</span>
+                            </a>
+                        </div>
+
+                    </div><!--/.client-3d__stage-->
+
+                    <button class="client-3d__nav client-3d__nav--prev" type="button"
+                        data-client-prev aria-label="Previous client">
+                        <span aria-hidden="true">&#8249;</span>
+                    </button>
+                    <button class="client-3d__nav client-3d__nav--next" type="button"
+                        data-client-next aria-label="Next client">
+                        <span aria-hidden="true">&#8250;</span>
+                    </button>
+
+                    <div class="client-3d__dots" id="client3dDots" data-client-dots role="tablist"
+                        aria-label="Choose a client"></div>
+                </div><!--/.client-3d-->
+            </div><!--/.container-->
         </div><!--/.clients-area-->
 
     </section><!--/.clients-->
@@ -1209,11 +1309,11 @@ var base="https://design.designhunk.com";
                                     <div class="single-contact-add-info">
                                         <h3>email</h3>
                                         <p>atulrathodc@gmail.com</p>
-                                        <p>sales@designhunk.com</p>
+                                        <p>sales@buildurgent.com</p>
                                     </div>
                                     <div class="single-contact-add-info">
                                         <h3>website</h3>
-                                        <p>designhunk.com</p>
+                                        <p>portfolio.buildurgent.com</p>
                                     </div>
                                 </div>
                             </div><!--/.contact-adress-->
@@ -1224,7 +1324,7 @@ var base="https://design.designhunk.com";
                                     <li><a target="_blank" href="https://twitter.com/Atul_Rathod11"><i
                                                 class="fa fa-twitter"></i></a></li><!--/li-->
                                     <li><a target="_blank"
-                                            href="https://www.linkedin.com/in/freelancer-atul-99bb58bb/"><i
+                                            href="https://www.linkedin.com/in/atul-rathod-99bb58bb/"><i
                                                 class="fa fa-linkedin"></i></a></li><!--/li-->
                                     <li><a target="_blank" href="https://www.instagram.com/atul__rathod/"><i
                                                 class="fa fa-instagram"></i></a></li><!--/li-->
@@ -1238,7 +1338,7 @@ var base="https://design.designhunk.com";
 
     </section><!--/.contact-->
     <!--contact end -->
- <a
+ <a class="wa-cta"
       href="https://wa.me/917263932000"
       target="_blank"
       rel="noopener noreferrer"
@@ -1316,6 +1416,12 @@ var base="https://design.designhunk.com";
 
     <!--Custom JS-->
     <script src="assets/js/custom.js"></script>
+
+    <!--3D background: vendored Three.js r128 + the Astra WebGL scene, then the
+        CSS-parallax fallback driver (which bails when WebGL took over).-->
+    <script src="assets/js/three.min.js"></script>
+    <script src="assets/js/astra3d.js"></script>
+    <script src="assets/js/parallax3d.js"></script>
     <!-- <script>
 function ww() {
   var xhttp = new XMLHttpRequest();
@@ -1372,6 +1478,8 @@ console.log(response);
     <script type="text/javascript">
         var bizContent = '{"serialNumber":"330503JD05000018060401001YDQBWEG","status":38}';
         var keyUtf8 = CryptoJS.enc.Utf8.parse('KYIDZQJKNCQRYEBARBKX');
+        // AES options (CryptoJS defaults: CBC mode, PKCS7 padding)
+        var options = { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 };
 
         function encrypt(word, key) {
             var ciphertext = CryptoJS.AES.encrypt(word, key, options);
@@ -1381,8 +1489,10 @@ console.log(response);
             var decrypt = CryptoJS.AES.decrypt(word, key, options);
             return CryptoJS.enc.Utf8.stringify(decrypt).toString();
         }
-        var encryptTxt = encrypt(bizContent, keyUtf8);
-        var decryptTxt = decrypt(encryptTxt, keyUtf8);
+        // NOTE: the demo calls below are unused (their results are never read) and
+        // threw on every page load, so they are disabled to keep the page error-free.
+        // var encryptTxt = encrypt(bizContent, keyUtf8);
+        // var decryptTxt = decrypt(encryptTxt, keyUtf8);
     </script>
     <!-- <script>
 			// Define a secret key and the message to encrypt
@@ -1411,14 +1521,11 @@ console.log(response);
         gtag('config', 'G-2VQ4J8E0K7');
     </script>
     <style>
-        nav.navbar.bootsnav ul.nav>li>a {
-            padding: 35px 10px !important;
-        }
+        /* nav link padding is owned by the theme layer (style.css / responsive.css) */
         .owl-stage {
     max-width: 100vw !important;
         }
     </style>
-</body>
 </body>
 
 </html>

@@ -43,5 +43,9 @@ build
 **/.DS_Store
 /.mini/
 
+### Python ###
+__pycache__/
+*.py[cod]
+
 
 
