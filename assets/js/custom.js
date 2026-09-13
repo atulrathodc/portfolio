@@ -153,6 +153,7 @@ $(document).ready(function(){
         var dragX = null;
         var dragUsed = false;
         var rafId = null;
+        var lastStageW = -1;   // last stage width we laid the ring out for
         var dots = [];
 
         var reduce = window.matchMedia
@@ -341,8 +342,14 @@ $(document).ready(function(){
                 if (rafId) return;
                 rafId = window.requestAnimationFrame(function () {
                     rafId = null;
+                    var stageW = stage.clientWidth;
                     var before = cardW;
                     measure();
+                    /* hover / focus must never re-layout the ring: a ResizeObserver
+                       also fires for paint-only churn, so only touch the layout when
+                       the stage really changed size (or the card width changed). */
+                    if (stageW === lastStageW && cardW === before) return;
+                    lastStageW = stageW;
                     if (cardW !== before) apply(false);
                 });
             }

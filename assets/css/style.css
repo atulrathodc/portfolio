@@ -21,8 +21,23 @@ body{
 	overflow-x:hidden;
 }
 
-a,a:hover,a:active,a:focus {
+/* ROOT-CAUSE FIX — the card "loses its flex on hover" bug.
+   `display:inline-block` used to be declared on `a,a:hover,a:active,a:focus`.
+   A pseudo-class counts as a CLASS in specificity, so `a:hover` is (0,1,1) and
+   it OUTRANKED component rules such as `.client-3d__tile { display:flex }`
+   (0,1,0): the moment the pointer entered a client card the anchor was
+   re-laid-out from `flex` to `inline-block`, so its flex children (mark / name /
+   meta) collapsed out of the centred column. `display:inline-block` now lives on
+   the bare `a` selector (0,0,1) only — component rules win at rest AND on hover,
+   and no interaction state re-declares layout. */
+a {
 	display:inline-block;
+}
+
+a,
+a:hover,
+a:active,
+a:focus {
 	text-decoration:none;
 	color: #6a708e;
 	font-size:16px;
@@ -544,24 +559,36 @@ span.single-timeline-horizontal.spacial-horizontal-line {width: 88px;}
     background: -webkit-linear-gradient(left, #d92cf9 0%,#b636ff 100%);
     background: linear-gradient(to right, #d92cf9 0%,#b636ff 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d92cf9', endColorstr='#b636ff',GradientType=1 );
-    -webkit-transform:scale(0);
-    -moz-transform:scale(0);
-    -ms-transform:scale(0);
-    -o-transform:scale(0);
-    transform:scale(0);
-    -webkit-transition: .5s;
-    -moz-transition: .5s;
-    -ms-transition: .5s;
-    -o-transition: .5s;
-    transition: .5s;
+    /* paint-only reveal. The old `transform: scale(0) -> scale(1)` grew this
+       FULL-SIZE box (its caption text included) up from zero, so the label
+       squashed/stretched while it appeared — the "disturbed card" glitch. A
+       0.96 -> 1 nudge + opacity reads as the same reveal with no geometry
+       distortion, and the transition list no longer tweenes EVERY property
+       (background/gradient-filter/position) for half a second. */
+    -webkit-transform:scale(.96);
+    -moz-transform:scale(.96);
+    -ms-transform:scale(.96);
+    -o-transform:scale(.96);
+    transform:scale(.96);
+    opacity:0;
+    pointer-events:none;
+    -webkit-transform-origin:center center;
+    transform-origin:center center;
+    -webkit-transition: -webkit-transform .35s ease, opacity .35s ease;
+    transition: transform .35s ease, opacity .35s ease;
 }
-.single-profile:hover .single-profile-overlay{
+/* `top` is already 0 on the base rule above, so the hover state only has to
+   change paint properties — nothing here can move the box or its neighbours.
+   `:focus-within` keeps the caption visible for keyboard users. */
+.single-profile:hover .single-profile-overlay,
+.single-profile:focus-within .single-profile-overlay{
     -webkit-transform:scale(1);
     -moz-transform:scale(1);
     -ms-transform:scale(1);
     -o-transform:scale(1);
     transform:scale(1);
-    top:0;
+    opacity:1;
+    pointer-events:auto;
 }
 .single-profile:hover .profile-icon-name,.single-profile:hover .profile-txt a>i{color: #fff;}
 .single-profile:hover .profile-border {border:transparent;}
@@ -590,23 +617,32 @@ span.single-timeline-horizontal.spacial-horizontal-line {width: 88px;}
 .isotope .item img{
     width:100%;
     height:100%;
-    -webkit-transition: .5s;
-    -moz-transition: .5s;
-    -ms-transition: .5s;
-    -o-transition: .5s;
-    transition: .5s;
+    /* explicit property list: the old bare `transition: .5s` tweened EVERY
+       property (width/height/position included), so any stray reflow was
+       animated over half a second instead of snapping. */
+    -webkit-transition: -webkit-transform .5s ease;
+    transition: transform .5s ease;
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
 }
+/* keep this zoom in sync with the section-10 rule (.06) so the cascade can
+   never resolve `.isotope .item:hover img` to two different scales. */
 .isotope .item:hover  img{
-    -webkit-transform:scale(1.5);
-    -moz-transform:scale(1.5);
-    -ms-transform:scale(1.5);
-    -o-transform:scale(1.5);
-    transform:scale(1.5);
+    -webkit-transform:scale(1.06);
+    -moz-transform:scale(1.06);
+    -ms-transform:scale(1.06);
+    -o-transform:scale(1.06);
+    transform:scale(1.06);
 }/*.item img*/
 
 /*.isotope-overlay*/
 .isotope-overlay{
     position:absolute;
+    /* pinned geometry: without `top`/`left` the browser used the static position,
+       which parked this box ~239px BELOW the tile (clipped away), and the hover
+       rule's `top:0` then yanked it up to the top in a single frame. */
+    top:0;
+    left:0;
     height:100%;
     width:100%;
     background:rgba(31,44,108,.5);
@@ -615,16 +651,18 @@ span.single-timeline-horizontal.spacial-horizontal-line {width: 88px;}
     text-transform: uppercase;
     justify-content:center;
     flex-direction:row;
-    -webkit-transform:scale(0);
-    -moz-transform:scale(0);
-    -ms-transform:scale(0);
-    -o-transform:scale(0);
-    transform:scale(0);
-    -webkit-transition: .5s;
-    -moz-transition: .5s;
-    -ms-transition: .5s;
-    -o-transition: .5s;
-    transition: .5s;
+    /* paint-only reveal. The old `transform: scale(0) -> scale(1)` scaled the
+       FULL-SIZE caption container (its text too), so the caption squashed/stretched
+       while growing — the "disturbed card" glitch. No transform here at all now, so
+       the caption text can never distort. `pointer-events` keeps the resting-state
+       link from being an invisible touch target while still allowing focus. */
+    opacity:0;
+    pointer-events:none;
+    -webkit-transition: opacity .35s ease;
+    -moz-transition: opacity .35s ease;
+    -ms-transition: opacity .35s ease;
+    -o-transition: opacity .35s ease;
+    transition: opacity .35s ease;
 }
 .isotope-overlay a {
     display: inline-block;
@@ -632,13 +670,13 @@ span.single-timeline-horizontal.spacial-horizontal-line {width: 88px;}
     font-size: 14px;
     text-align: center;
 }
-.isotope .item:hover .isotope-overlay{
-    -webkit-transform:scale(1);
-    -moz-transform:scale(1);
-    -ms-transform:scale(1);
-    -o-transform:scale(1);
-    transform:scale(1);
-    top:0;
+/* no `top`/`transform` on hover any more: the overlay is already pinned at
+   top:0 and only its opacity changes, so the caption fades in where it sits.
+   `:focus-within` keeps the caption visible when the link is keyboard-focused. */
+.isotope .item:hover .isotope-overlay,
+.isotope .item:focus-within .isotope-overlay{
+    opacity:1;
+    pointer-events:auto;
 }/*.isotope-overlay*/
 
 /*-------------------------------------
@@ -939,9 +977,10 @@ span.single-timeline-horizontal.spacial-horizontal-line {width: 88px;}
     transition: 0.5s;
     
 }
-.content a:hover{
-    letter-spacing: 0.2em;
-}
+/* NOTE: `.content a:hover` used to widen the label with `letter-spacing: 0.2em`.
+   Letter-spacing is a layout property, so hovering re-flowed the button and
+   re-centred it inside the circle (the card "got disturbed"). The hover state
+   is now declared once in the theme layer below with compositor-only props. */
 
 a.contact-btn {
     height: 100%;
@@ -1303,16 +1342,17 @@ nav.navbar.bootsnav .navbar-toggle i {
     letter-spacing: 0.1em;
     text-transform: uppercase;
     box-shadow: 0 14px 34px rgba(34, 211, 238, 0.22), 0 8px 26px rgba(139, 92, 246, 0.28) !important;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+    /* no `transform` — hero buttons must not move on hover (see below) */
+    transition: box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
 }
 
+/* no geometry on hover: gradient + border + glow only, so the CTA keeps its
+   200x60 box and the neighbouring ghost button never moves. */
 .header-text a:hover,
 .header-text a:focus {
     background: var(--grad) !important;
     border-color: transparent !important;
     box-shadow: 0 18px 42px rgba(34, 211, 238, 0.32), 0 10px 32px rgba(139, 92, 246, 0.36) !important;
-    -webkit-transform: translateY(-2px);
-    transform: translateY(-2px);
 }
 
 .header-text a.hero-cta--ghost {
@@ -1487,10 +1527,22 @@ nav.navbar.bootsnav .navbar-toggle i {
     font-weight: 600;
     border-radius: var(--r-pill);
     letter-spacing: 0.1em;
+    /* explicit property list instead of `all`; `transform` is deliberately
+       absent — hover must not move the button (see the note below) */
+    transition: box-shadow 0.25s ease, color 0.2s ease,
+        background-color 0.2s ease, border-color 0.2s ease;
 }
 
+/* Hover must never touch letter-spacing: widening the label re-flowed the
+   button (measured 87px -> 90px, left edge shifting 1017.7px -> 1016.2px) and
+   re-centred it inside the circle, so the button visibly jumped as the cursor
+   arrived. The `translateY(-2px)` lift added later caused the same class of
+   jump (the button left its row by 2px), so it was removed as well.
+   Paint-level feedback only: colour/gradient + cyan glow shadow. */
 .content a:hover {
-    letter-spacing: 0.14em;
+    color: #05060f;
+    background: var(--grad);
+    box-shadow: 0 12px 30px rgba(34, 211, 238, 0.45);
 }
 
 /* ---------------------------------------------
@@ -1501,7 +1553,10 @@ nav.navbar.bootsnav .navbar-toggle i {
 }
 
 .timeline-horizontal-border {
-    padding: var(--sp-5) 0;
+    /* right inset keeps the rule inside its own column: with the 2px column
+       padding the line used to run out to the column edge and butt into the
+       next column's icon/line ("line going out") */
+    padding: var(--sp-5) 14px var(--sp-5) 0;
 }
 
 .timeline-horizontal-border i {
@@ -1513,6 +1568,8 @@ nav.navbar.bootsnav .navbar-toggle i {
 span.single-timeline-horizontal {
     flex: 1 1 auto;
     width: auto;
+    min-width: 0;
+    max-width: 100%;
     height: 2px;
     border-radius: var(--r-pill);
     background: linear-gradient(90deg, rgba(34, 211, 238, 0.75), rgba(139, 92, 246, 0.2));
@@ -1697,20 +1754,28 @@ span.single-timeline-horizontal.spacial-horizontal-line {
     overflow: hidden;
     background: var(--surface);
     box-shadow: var(--sh-sm);
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    /* no `transform` in the transition list — the hover state below is paint-only */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* hover: glow + border only. The old `translateY(-6px)` lifted the tile out of
+   its grid row and broke alignment with its neighbours (the reported jump). */
 .isotope .item:hover {
-    -webkit-transform: translateY(-6px);
-    transform: translateY(-6px);
     border-color: var(--border-strong);
     box-shadow: var(--sh-glow);
 }
 
-/* a 1.5x zoom was unusable at this tile size */
+/* a 1.5x zoom was unusable at this tile size.
+   This zoom is the ONLY hover transform kept in this block: it is applied to
+   the <img> inside a tile whose `overflow: hidden` clips it, so the image can
+   never escape the tile and can never move the tile or its neighbours.
+   The legacy `.isotope .item:hover img` rule in section 9 now states the same
+   1.06 scale, so the two blocks can no longer resolve to different values. */
 .isotope .item:hover img {
     -webkit-transform: scale(1.06);
     transform: scale(1.06);
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
 }
 
 .isotope-overlay {
@@ -1755,16 +1820,17 @@ span.single-timeline-horizontal.spacial-horizontal-line {
     letter-spacing: 0.12em;
     text-transform: uppercase;
     text-align: center;
-    transition: transform 0.3s ease, color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+    /* no `transform` — hover feedback below is paint-only */
+    transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
 }
 
+/* hover: colour + border + tint only. The old `translateY(-3px)` lifted the
+   logo tile out of the Owl row and disturbed the strip's alignment. */
 .clients .clients-area .owl-carousel .owl-item a:hover,
 .clients .clients-area .owl-carousel .owl-item a:focus {
     color: #ffffff;
     border-color: var(--border-strong);
     background: rgba(34, 211, 238, 0.12);
-    -webkit-transform: translateY(-3px);
-    transform: translateY(-3px);
 }
 
 /* ---------------------------------------------
@@ -1855,7 +1921,10 @@ span.single-timeline-horizontal.spacial-horizontal-line {
     color: var(--text-muted);
     text-align: center;
     box-shadow: var(--sh-sm);
-    transition: transform 0.35s ease, border-color 0.35s ease, color 0.35s ease,
+    /* no `transform`: the JS coverflow writes ring transforms on
+       .client-3d__slide, so a CSS hover transform here could fight them and
+       disturb the ring (see the hover note below) */
+    transition: border-color 0.35s ease, color 0.35s ease,
         box-shadow 0.35s ease, background-color 0.35s ease;
 }
 
@@ -1927,8 +1996,16 @@ span.single-timeline-horizontal.spacial-horizontal-line {
     background: rgba(34, 211, 238, 0.2);
 }
 
-/* ---- hover / focus lift (same specificity as the active rule above,
-       declared later so a hovered active card still lifts) ---- */
+/* ---- hover / focus highlight (same specificity as the active rule above,
+       declared later so a hovered active card still highlights).
+       PAINT-ONLY by contract: colour / border / background / box-shadow /
+       opacity. Never add display, flex-*, gap, width, height, position or
+       transform here — the JS coverflow owns the ring transform on
+       .client-3d__slide and hover must not re-layout the stage or the tile.
+       The two bare selectors below are NOT redundant: the `.is-ready` pair above
+       only exists with JS, so `.client-3d__tile:hover/:focus-visible` is the
+       hover/focus feedback of the no-JS fallback (see the `.client-3d__stage`
+       flex grid at the top of this section). ---- */
 .client-3d.is-ready .client-3d__slide:hover .client-3d__tile,
 .client-3d.is-ready .client-3d__slide:focus-within .client-3d__tile,
 .client-3d__tile:hover,
@@ -1939,8 +2016,6 @@ span.single-timeline-horizontal.spacial-horizontal-line {
         linear-gradient(160deg, rgba(34, 211, 238, 0.18), rgba(139, 92, 246, 0.14) 46%, rgba(5, 6, 15, 0) 78%),
         var(--surface-2);
     box-shadow: 0 22px 46px rgba(34, 211, 238, 0.22);
-    -webkit-transform: translateY(-6px);
-    transform: translateY(-6px);
 }
 
 .client-3d__tile:hover .client-3d__glow,
@@ -1988,14 +2063,18 @@ span.single-timeline-horizontal.spacial-horizontal-line {
 .client-3d__nav--prev { left: 0; }
 .client-3d__nav--next { right: 0; }
 
+/* hover: colour + glow only. The `-50%` centering is restated explicitly so the
+   arrow can never lose it and jump vertically (that is what happened whenever
+   the hover transform was nulled or forgot the translate). The old
+   `scale(1.08)` grew the 44px arrow, so it was dropped with the lift. */
 .client-3d__nav:hover,
 .client-3d__nav:focus-visible {
     color: #ffffff;
     border-color: var(--accent);
     background: rgba(34, 211, 238, 0.18);
     box-shadow: 0 0 22px rgba(34, 211, 238, 0.4);
-    -webkit-transform: translateY(-50%) scale(1.08);
-    transform: translateY(-50%) scale(1.08);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
 
 /* ---- generated dots ---- */
@@ -2114,16 +2193,18 @@ section.clients {
     border-radius: var(--r-sm);
     background: var(--surface);
     color: var(--text-muted) !important;
-    transition: transform 0.25s ease, color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+    /* no `transform` — these icons are floated in a row, so any lift on hover
+       visibly breaks their alignment (see below) */
+    transition: color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
 }
 
+/* hover: fill + colour only. The old `translateY(-2px)` raised each floated
+   icon out of the row — this is the "alignment gets disturbed on hover" jump. */
 .hm-foot-icon ul li > a:hover,
 .hm-foot-icon ul li > a:focus {
     color: #05060f !important;
     background: var(--grad);
     border-color: transparent;
-    -webkit-transform: translateY(-2px);
-    transform: translateY(-2px);
 }
 
 /* ---------------------------------------------
@@ -2186,8 +2267,7 @@ section.clients {
     color: #05060f;
     border: 0;
     box-shadow: 0 18px 42px rgba(34, 211, 238, 0.38), 0 10px 32px rgba(139, 92, 246, 0.4);
-    -webkit-transform: translateY(-3px);
-    transform: translateY(-3px);
+    /* no geometry on hover: the FAB keeps its fixed box, only the glow grows */
 }
 
 /* WhatsApp CTA: was raw inline green, now part of the button system */
@@ -2207,15 +2287,15 @@ a.wa-cta {
     -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     z-index: 1200 !important;
-    transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+    /* no `transform` — hover is paint-only (see below) */
+    transition: border-color 0.25s ease, background-color 0.25s ease;
 }
 
+/* no geometry on hover: colour/border tint only, the pill stays put */
 a.wa-cta:hover,
 a.wa-cta:focus {
     border-color: #25d366 !important;
     background: rgba(37, 211, 102, 0.2) !important;
-    -webkit-transform: translateY(-2px);
-    transform: translateY(-2px);
 }
 
 /* ---------------------------------------------
@@ -2262,13 +2342,12 @@ a.wa-cta:focus {
     letter-spacing: 0.08em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: box-shadow 0.25s ease;
 }
 
+/* no geometry on hover: glow only, so the banner button cannot resize/refit */
 #cookie-consent-banner button:hover,
 #cookie-consent-banner button:focus {
-    -webkit-transform: translateY(-2px);
-    transform: translateY(-2px);
     box-shadow: 0 12px 30px rgba(34, 211, 238, 0.3);
 }
 
@@ -2293,6 +2372,7 @@ a.wa-cta:focus {
     .header-text a,
     .isotope .item,
     .isotope .item img,
+    .isotope-overlay,
     .clients .clients-area .owl-carousel .owl-item a,
     .client-3d__slide,
     .client-3d__tile,
@@ -2308,24 +2388,81 @@ a.wa-cta:focus {
         transition: none !important;
     }
 
-    .isotope .item:hover,
-    .isotope .item:hover img,
-    .clients .clients-area .owl-carousel .owl-item a:hover,
-    .client-3d__tile:hover,
-    .client-3d__tile:focus-visible,
-    .client-3d__nav:hover,
-    .client-3d__nav:focus-visible,
-    .hm-foot-icon ul li > a:hover,
-    #scroll-Top .return-to-top:hover,
-    a.wa-cta:hover {
+    /* every hover state is paint-only now, so the only hover transform left to
+       calm down is the clipped portfolio image zoom. */
+    .isotope .item:hover img {
         -webkit-transform: none !important;
         transform: none !important;
+    }
+
+    /* IMPORTANT: the nav arrows must KEEP their -50% centering here. A blanket
+       `transform: none` on :hover dropped the translate and made the arrows
+       jump vertically on hover. */
+    .client-3d__nav:hover,
+    .client-3d__nav:focus-visible {
+        -webkit-transform: translateY(-50%) !important;
+        transform: translateY(-50%) !important;
     }
 }
 
 li.smooth-menu1
  {
     list-style: none;
+}
+
+/* ---------------------------------------------
+   Cookie consent banner + Accept button
+   The Accept <button> had no styling class and only inline styles, so it
+   rendered as a browser-default control. It now uses the same button language
+   (token gradient, radius, uppercase label) as the rest of the site, and its
+   hover/focus states are paint-only (box-shadow / outline — no transform, so
+   the button cannot shift under the cursor).
+--------------------------------------------- */
+.cookie-banner {
+    background: var(--surface, #0b1020) !important;
+    border-top: 1px solid var(--border, #223047);
+    color: #b9c4d8;
+    box-shadow: var(--sh-sm, 0 -8px 24px rgba(0, 0, 0, .35));
+}
+
+.cookie-banner p {
+    color: #b9c4d8;
+    max-width: 68ch;
+    margin: 0 auto !important;
+    line-height: 1.6;
+}
+
+.cookie-banner p a {
+    color: var(--accent, #22d3ee);
+    text-decoration: underline;
+}
+
+.cookie-accept {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: var(--sp-3, 12px);
+    padding: 10px 26px;
+    border: 1px solid transparent;
+    border-radius: var(--r-md, 10px);
+    background: var(--grad, linear-gradient(to right, #22d3ee 0%, #8b5cf6 100%));
+    color: #05060f;
+    font-family: var(--font-display, inherit);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: box-shadow .3s ease;
+}
+
+.cookie-accept:hover {
+    box-shadow: var(--sh-glow, 0 0 0 1px rgba(34, 211, 238, .5));
+}
+
+.cookie-accept:focus-visible {
+    outline: 2px solid var(--accent, #22d3ee);
+    outline-offset: 2px;
 }
 
 /* ---------------------------------------------
