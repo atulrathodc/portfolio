@@ -667,6 +667,10 @@ span.single-timeline-horizontal.spacial-horizontal-line {width: 88px;}
     padding: 50px 0 100px;
 }
 .single-contact-box {padding-top: 100px;}
+/* Contact form hidden on request (display:none) - address block stays visible */
+.contact-form {
+    display: none !important;
+}
 .contact-form  .form-group {
     margin-bottom: 20px;
     

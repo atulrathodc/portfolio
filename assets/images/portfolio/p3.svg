@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="East Spring car racing game">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c2410c"/>
+      <stop offset="1" stop-color="#fb923c"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.22" cy="0.12" r="0.95">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <rect width="600" height="400" fill="url(#glow)"/>
+  <circle cx="530" cy="58" r="126" fill="#ffffff" opacity="0.07"/>
+  <circle cx="70" cy="366" r="146" fill="#3b1203" opacity="0.12"/>
+  <g fill="#ffffff" opacity="0.55">
+    <rect x="120" y="120" width="70" height="8" rx="4"/>
+    <rect x="96" y="146" width="118" height="8" rx="4"/>
+    <rect x="130" y="172" width="56" height="8" rx="4"/>
+  </g>
+  <g transform="translate(316,152)">
+    <path d="M-104,26 L-92,-12 C-86,-32 -70,-42 -48,-42 L28,-42 C52,-42 68,-32 78,-12 L90,26 Z" fill="#ffffff" opacity="0.96"/>
+    <path d="M-58,-30 L-40,-30 L-34,-4 L-66,-4 Z" fill="#7c2d12" opacity="0.85"/>
+    <path d="M40,-30 L58,-30 L64,-4 L32,-4 Z" fill="#7c2d12" opacity="0.85"/>
+    <rect x="-108" y="26" width="212" height="26" rx="10" fill="#ffffff" opacity="0.9"/>
+    <circle cx="-58" cy="54" r="24" fill="#7c2d12"/>
+    <circle cx="-58" cy="54" r="10" fill="#ffffff" opacity="0.85"/>
+    <circle cx="58" cy="54" r="24" fill="#7c2d12"/>
+    <circle cx="58" cy="54" r="10" fill="#ffffff" opacity="0.85"/>
+  </g>
+  <g fill="#ffffff" opacity="0.9">
+    <path d="M414,84 l6,-15 6,15 15,6 -15,6 -6,15 -6,-15 -15,-6 z"/>
+  </g>
+  <text x="300" y="322" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="34" font-weight="700" fill="#ffffff">East Spring Racing</text>
+  <text x="300" y="356" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="17" letter-spacing="2" fill="#ffffff" opacity="0.88">CAR RACING GAME</text>
+</svg>

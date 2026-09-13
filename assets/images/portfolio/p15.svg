@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="SAP Commerce storefront B2B ordering web">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7c2d12"/>
+      <stop offset="1" stop-color="#fb7185"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.22" cy="0.12" r="0.95">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.36"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <rect width="600" height="400" fill="url(#glow)"/>
+  <circle cx="530" cy="58" r="126" fill="#ffffff" opacity="0.08"/>
+  <circle cx="66" cy="362" r="146" fill="#3b0d05" opacity="0.16"/>
+  <g transform="translate(292,138)">
+    <path d="M-150,26 L-128,-26 L128,-26 L150,26 Z" fill="#ffffff" opacity="0.95"/>
+    <rect x="-150" y="26" width="300" height="20" rx="6" fill="#ffffff" opacity="0.95"/>
+    <rect x="-96" y="46" width="192" height="68" rx="10" fill="#ffffff" opacity="0.8"/>
+    <rect x="96" y="46" width="22" height="68" fill="#ffffff" opacity="0.85"/>
+    <circle cx="-20" cy="76" r="14" fill="#7c2d12" opacity="0.5"/>
+    <rect x="4" y="70" width="60" height="12" rx="6" fill="#7c2d12" opacity="0.38"/>
+    <path d="M-92,-26 L-84,-62 L84,-62 L92,-26 Z" fill="#ffffff" opacity="0.6"/>
+  </g>
+  <g transform="translate(438,186)">
+    <path d="M-34,-42 L34,-42 L50,8 L50,20 L-50,20 L-50,8 Z" fill="#ffffff" opacity="0.95"/>
+    <path d="M-14,-42 A14,14 0 0 1 14,-42" fill="none" stroke="#ffffff" stroke-width="8" opacity="0.95"/>
+    <circle cx="0" cy="48" r="9" fill="#ffffff" opacity="0.95"/>
+  </g>
+  <text x="300" y="330" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="32" font-weight="700" fill="#ffffff">Commerce Storefront</text>
+  <text x="300" y="364" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="15" letter-spacing="2" fill="#ffffff" opacity="0.88">B2B ORDERING &#183; SAP COMMERCE</text>
+</svg>

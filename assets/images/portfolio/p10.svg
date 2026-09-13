@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="Fresenius Medical Care EAccess portal">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d4ed8"/>
+      <stop offset="1" stop-color="#60a5fa"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.22" cy="0.12" r="0.95">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <rect width="600" height="400" fill="url(#glow)"/>
+  <circle cx="530" cy="58" r="126" fill="#ffffff" opacity="0.08"/>
+  <circle cx="66" cy="364" r="148" fill="#0b2559" opacity="0.14"/>
+  <g transform="translate(300,144)">
+    <path d="M0,-88 L92,-56 C92,10 60,66 0,94 C-60,66 -92,10 -92,-56 Z" fill="#ffffff" opacity="0.95"/>
+    <rect x="-16" y="-34" width="32" height="86" rx="7" fill="#1d4ed8"/>
+    <rect x="-43" y="-7" width="86" height="32" rx="7" fill="#1d4ed8"/>
+  </g>
+  <g fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity="0.92">
+    <path d="M108,268 L164,268 L184,232 L210,300 L232,268 L492,268"/>
+  </g>
+  <text x="300" y="356" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="30" font-weight="700" fill="#ffffff">Fresenius EAccess</text>
+  <text x="300" y="384" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="15" letter-spacing="2" fill="#ffffff" opacity="0.88">MEDICAL CARE PLATFORM</text>
+</svg>

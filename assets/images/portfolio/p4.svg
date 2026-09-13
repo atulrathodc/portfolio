@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="Visual commerce product">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#047857"/>
+      <stop offset="1" stop-color="#34d399"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.22" cy="0.12" r="0.95">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <rect width="600" height="400" fill="url(#glow)"/>
+  <circle cx="528" cy="60" r="126" fill="#ffffff" opacity="0.07"/>
+  <circle cx="66" cy="362" r="148" fill="#012a1e" opacity="0.12"/>
+  <g transform="translate(300,150)">
+    <rect x="-96" y="-72" width="192" height="132" rx="12" fill="#ffffff" opacity="0.95"/>
+    <rect x="-84" y="-60" width="168" height="108" rx="6" fill="#047857" opacity="0.75"/>
+    <path d="M-84,36 L-46,-2 L-18,26 L12,4 L84,48 L-84,48 Z" fill="#ffffff" opacity="0.9"/>
+    <circle cx="40" cy="-34" r="11" fill="#fde68a"/>
+    <circle cx="42" cy="6" r="20" fill="none" stroke="#ffffff" stroke-width="6"/>
+    <circle cx="42" cy="6" r="6" fill="#ffffff"/>
+    <path d="M16,40 L-14,80 L14,80 L34,44 Z" fill="#ffffff" opacity="0.95"/>
+    <circle cx="-60" cy="66" r="12" fill="none" stroke="#ffffff" stroke-width="6"/>
+    <path d="M-52,74 L-38,86" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <path d="M404,88 l6,-15 6,15 15,6 -15,6 -6,15 -6,-15 -15,-6 z" fill="#ffffff" opacity="0.9"/>
+  <text x="300" y="322" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="34" font-weight="700" fill="#ffffff">Visual Commerce</text>
+  <text x="300" y="356" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="17" letter-spacing="2" fill="#ffffff" opacity="0.88">PRODUCT DEVELOPMENT</text>
+</svg>

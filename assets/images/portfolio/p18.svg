@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-label="Designed ad projects poker blackjack and racing games">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#831843"/>
+      <stop offset="1" stop-color="#f472b6"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.22" cy="0.12" r="0.95">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.36"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <rect width="600" height="400" fill="url(#glow)"/>
+  <circle cx="530" cy="58" r="126" fill="#ffffff" opacity="0.08"/>
+  <circle cx="66" cy="362" r="146" fill="#3d0620" opacity="0.18"/>
+  <g transform="translate(268,150)">
+    <g transform="rotate(-14)">
+      <rect x="-58" y="-84" width="116" height="168" rx="14" fill="#ffffff" opacity="0.96"/>
+      <path d="M0,-52 C22,-34 40,-14 40,6 C40,26 22,40 0,50 C-22,40 -40,26 -40,6 C-40,-14 -22,-34 0,-52 Z" fill="#831843" opacity="0.9"/>
+      <rect x="-40" y="-66 " width="14" height="14" rx="4" fill="#831843" opacity="0.55"/>
+      <rect x="26" y="52" width="14" height="14" rx="4" fill="#831843" opacity="0.55"/>
+    </g>
+    <g transform="translate(96,10) rotate(12)">
+      <rect x="-58" y="-84" width="116" height="168" rx="14" fill="#ffffff" opacity="0.9"/>
+      <path d="M-30,-50 L30,-50 L30,-30 L-30,-30 Z" fill="#831843" opacity="0.85"/>
+      <path d="M-30,-14 L30,-14 L30,6 L-30,6 Z" fill="#831843" opacity="0.85"/>
+      <path d="M-30,22 L30,22 L30,42 L-30,42 Z" fill="#831843" opacity="0.85"/>
+    </g>
+    <g transform="translate(-6,104)">
+      <rect x="-40" y="-40" width="80" height="80" rx="14" fill="#ffffff" opacity="0.96"/>
+      <circle cx="-20" cy="-20" r="7" fill="#831843"/>
+      <circle cx="20" cy="20" r="7" fill="#831843"/>
+      <circle cx="0" cy="0" r="7" fill="#831843"/>
+    </g>
+  </g>
+  <g fill="#ffffff" opacity="0.9">
+    <path d="M470,84 l6,-15 6,15 15,6 -15,6 -6,15 -6,-15 -15,-6 z"/>
+  </g>
+  <text x="300" y="330" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="32" font-weight="700" fill="#ffffff">Playable Game Ads</text>
+  <text x="300" y="364" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="15" letter-spacing="2" fill="#ffffff" opacity="0.88">POKER &#183; BLACKJACK &#183; RACING</text>
+</svg>
