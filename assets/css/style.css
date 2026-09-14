@@ -1324,6 +1324,7 @@ nav.navbar.bootsnav .navbar-toggle i {
     --t3d-lift: 140px;         /* how deep a glyph drops in from (px)        */
     --t3d-depth: 1;            /* idle float + pointer parallax amplitude    */
     --t3d-caret-hold: 3.4s;    /* rest beat before the hero sits at idle     */
+    --t3d-pixel-ratio: 1;      /* desktop baseline pixel ratio for the 3-D   */
 }
 
 /* typing3d.js adds `.typing3d-host` so this container becomes the positioning
@@ -2563,7 +2564,8 @@ section.clients {
     color: var(--accent);
 }
 
-/* back-to-top raised above the WhatsApp CTA so they never overlap */
+/* back-to-top FAB: keeps the theme's raised offset so it clears the fixed
+   cookie banner. */
 #scroll-Top .return-to-top {
     right: 32px;
     bottom: 96px;
@@ -2584,34 +2586,6 @@ section.clients {
     border: 0;
     box-shadow: 0 18px 42px rgba(34, 211, 238, 0.38), 0 10px 32px rgba(139, 92, 246, 0.4);
     /* no geometry on hover: the FAB keeps its fixed box, only the glow grows */
-}
-
-/* WhatsApp CTA: was raw inline green, now part of the button system */
-a.wa-cta {
-    right: 24px !important;
-    bottom: 24px !important;
-    padding: 12px 20px !important;
-    border: 1px solid rgba(37, 211, 102, 0.45) !important;
-    border-radius: var(--r-pill) !important;
-    background: rgba(10, 22, 18, 0.88) !important;
-    color: #d9fbe7 !important;
-    font-family: var(--font-display);
-    font-size: 13px !important;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45) !important;
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    z-index: 1200 !important;
-    /* no `transform` — hover is paint-only (see below) */
-    transition: border-color 0.25s ease, background-color 0.25s ease;
-}
-
-/* no geometry on hover: colour/border tint only, the pill stays put */
-a.wa-cta:hover,
-a.wa-cta:focus {
-    border-color: #25d366 !important;
-    background: rgba(37, 211, 102, 0.2) !important;
 }
 
 /* ---------------------------------------------
@@ -2716,8 +2690,7 @@ a.wa-cta:focus {
     .hm-foot-icon ul li > a,
     nav.navbar.bootsnav ul.nav > li > a::after,
     .single-profile-overlay,
-    #scroll-Top .return-to-top,
-    a.wa-cta {
+    #scroll-Top .return-to-top {
         transition: none !important;
     }
 
@@ -2807,4 +2780,71 @@ li.smooth-menu1
     nav.navbar.bootsnav ul.nav > li > a {
         padding: 40px 18px;
     }
+}
+
+/* ---------------------------------------------
+   17. Header WhatsApp CTA
+   Icon-driven pill in the right-hand nav group (last <li>, see index.html).
+   The number lives in exactly ONE place: the wa.me href in index.html
+   (919999999999 there is a PLACEHOLDER to be replaced by the owner).
+   Hover/focus below is PAINT-ONLY (background, border, box-shadow) — the
+   theme's generic `a:hover` rule is (0,1,1) and this repo's rule is to keep
+   interaction states free of layout declarations.
+--------------------------------------------- */
+nav.navbar.bootsnav ul.nav > li.nav-whatsapp > a {
+    /* same box as the other nav items -> the pill self-aligns at every breakpoint */
+    padding: 40px 18px;
+    line-height: 1;
+    color: #ffffff !important;
+}
+
+/* the theme paints a gradient underline under every nav item; a pill has none */
+nav.navbar.bootsnav ul.nav > li.nav-whatsapp > a::after {
+    display: none;
+}
+
+.whatsapp-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-2, 8px);
+    padding: 9px 16px;
+    border: 1px solid rgba(37, 211, 102, 0.45);
+    border-radius: var(--r-pill, 999px);
+    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+    color: #ffffff !important;
+    font-family: var(--font-display, inherit);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    /* centres the pill on the nav item's line box */
+    vertical-align: middle;
+    box-shadow: 0 6px 18px rgba(37, 211, 102, 0.28);
+    -webkit-transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.whatsapp-cta .fa-whatsapp {
+    font-size: 17px;
+    line-height: 1;
+    color: #ffffff !important;
+}
+
+/* hover / focus feedback — paint only */
+nav.navbar.bootsnav ul.nav > li.nav-whatsapp > a:hover .whatsapp-cta,
+nav.navbar.bootsnav ul.nav > li.nav-whatsapp > a:focus .whatsapp-cta,
+.sticky-wrapper.is-sticky nav.navbar.bootsnav ul.nav > li.nav-whatsapp > a:hover .whatsapp-cta,
+.sticky-wrapper.is-sticky nav.navbar.bootsnav ul.nav > li.nav-whatsapp > a:focus .whatsapp-cta {
+    background: linear-gradient(135deg, #2fdc72 0%, #14a08e 100%);
+    border-color: #25d366;
+    color: #ffffff !important;
+    box-shadow: 0 8px 26px rgba(37, 211, 102, 0.5);
+}
+
+/* keyboard focus: the global `a:focus-visible` outline + a glow on the pill */
+nav.navbar.bootsnav ul.nav > li.nav-whatsapp > a:focus-visible .whatsapp-cta {
+    box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.55), 0 8px 26px rgba(37, 211, 102, 0.5);
 }

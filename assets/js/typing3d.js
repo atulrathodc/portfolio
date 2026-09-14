@@ -354,15 +354,24 @@
        4. Layout — canvas box over the <h2>, one mesh per glyph
     -------------------------------------------------------------------- */
     function layoutCanvas() {
+        /* CSS-pixel box: W/H cover the <h2> at 1 world unit == 1 CSS pixel. The
+           render resolution is a separate axis (device pixel ratio), so W/H are
+           NEVER multiplied by DPR - only renderer.setPixelRatio() scales the
+           backing store. `--t3d-pixel-ratio` (style.css / responsive.css) wins
+           when present so breakpoints can dial the resolution; otherwise fall
+           back to the clamped device ratio. */
         W = Math.max(1, title.offsetWidth);
         H = Math.max(1, title.offsetHeight);
-        DPR = Math.min(window.devicePixelRatio || 1, 2);
+        var cssRatio = tokenNum('--t3d-pixel-ratio', 0);
+        DPR = cssRatio > 0 ? cssRatio : Math.min(window.devicePixelRatio || 1, 2);
         canvas.style.left = title.offsetLeft + 'px';
         canvas.style.top = title.offsetTop + 'px';
         canvas.style.width = W + 'px';
         canvas.style.height = H + 'px';
         renderer.setPixelRatio(DPR);
-        renderer.setSize(W, H, false);
+        /* third arg `true` keeps canvas.style.width/height in CSS pixels (the
+           drawbuffer is W*DPR internally, but the element stays W x H CSS px). */
+        renderer.setSize(W, H, true);
         /* distance chosen so that 1 world unit == 1 CSS pixel at z = 0, while a
            translateZ still changes apparent scale (real perspective depth). */
         dist = (H / 2) / Math.tan((FOV * Math.PI / 180) / 2);
@@ -756,7 +765,7 @@
     /* --------------------------------------------------------------------
        10. Boot
     -------------------------------------------------------------------- */
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(tokenNum('--t3d-pixel-ratio', Math.min(window.devicePixelRatio || 1, 2)));
     layoutCanvas();
     buildGlyphs();
     syncFromDom();
