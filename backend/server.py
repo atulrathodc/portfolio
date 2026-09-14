@@ -36,6 +36,9 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(_HERE) if os.path.basename(_HERE) == "backend" else _HERE
 
 API_PREFIX = "/api/"
+#: Bumped whenever the JSON API contract changes (routes added/removed, payload keys
+#: renamed). Exposed by GET /api/health so consumers can pin against a known contract.
+API_VERSION = "1.0"
 PROJECT_DIR = os.path.join(ROOT, "assets", "images", "portfolio")
 RESUME_DIR = os.path.join(ROOT, "assets", "download")
 STARTED_AT = time.time()
@@ -122,6 +125,7 @@ def health():
     return {
         "status": "ok",
         "service": "portfolio-api",
+        "api_version": API_VERSION,
         "uptime_seconds": round(time.time() - STARTED_AT, 3),
         "routes": sorted(PortfolioHandler.ROUTES),
     }

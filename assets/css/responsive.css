@@ -128,8 +128,36 @@
 }/*max-width:992px*/
 
 @media screen and (max-width:767px){
+	/* 3-D hero headline on phones: shallower perspective, calmer idle float.
+	   Font size still comes from the clamp() in style.css. */
+	.header-text {
+		perspective: 760px;
+		/* WebGL typed layer on phones: a shallower drop-in, a calmer idle float
+		   and a slightly quicker stamp. typing3d.js reads these tokens, so the
+		   WebGL schedule follows without any duplicate timing in JS. */
+		--t3d-lift: 96px;
+		--t3d-depth: 0.62;
+		--t3d-stamp: 0.36s;
+		--t3d-float: 6.4s;
+	}
 	.header-text h2 {
 		letter-spacing: 0;
+		line-height: 1.1;
+		/* typed reveal on phones: a slightly calmer cadence, a shorter stamp with
+		   less motion blur (keeps the 17 glyph entrances cheap) and a slower,
+		   gentler idle wave. hero3d.js reads these tokens, so the typing schedule
+		   follows automatically - nothing is duplicated in JS. */
+		--tl-step: 84ms;
+		--tl-in: 0.3s;
+		--tl-in-delay: 260ms;
+		--tl-pause-line: 250ms;
+		--tl-type-blur: 2px;
+		--tl-wave: 4.6s;
+		--tl-wave-gap: 1180ms;
+		--tl-sheen: 8s;
+	}
+	.header-text.hero-3d-in .hero-3d__bob {
+		animation-duration: 9.5s;
 	}
 	.hero-actions {
 		flex-direction: column;

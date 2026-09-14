@@ -185,8 +185,23 @@
                     <div class="header-text">
                         <span class="hero-badge"><i class="fa fa-circle" aria-hidden="true"></i> available for
                             freelance work</span>
-                        <h2>hi <span>,</span> i am <br> Atul <br> Rathod <span>.</span> </h2>
-                        <p>ui/ux designer and web developer</p>
+                        <!-- 3-D headline. One word per group, FOUR layers each:
+                             .hero-3d__w   = per-word entrance gather (CSS keyframes, --i/--d)
+                             .hero-3d__bob = per-word idle float (rotateX/rotateY/translateZ)
+                             .hero-3d__in  = word paint + pointer depth
+                             .hero-3d__l   = per-LETTER stage: own flip-rise entrance,
+                                             idle wave and gradient slice (--j = global
+                                             letter index, so the cascade flows across the
+                                             whole headline and letters parallax deeper)
+                             The markup is deliberately inline so the accessible text still
+                             reads exactly "hi , i am Atul Rathod ." and the <br> line
+                             structure (3 lines) is unchanged. The letter spans are written
+                             with no whitespace between them (only the real spaces between
+                             words are text nodes) so glyphs keep their kerning-free but
+                             correctly spaced layout. hero3d.js only adds motion classes,
+                             so the headline stays readable with JS disabled. -->
+                        <h2 class="hero-title" aria-label="hi, i am Atul Rathod."><span class="hero-3d__w" style="--i:0;--d:0.5"><span class="hero-3d__bob"><span class="hero-3d__in"><span class="hero-3d__l" style="--j:0">h</span><span class="hero-3d__l" style="--j:1">i</span></span></span></span> <span class="hero-3d__w" style="--i:1;--d:0.85"><span class="hero-3d__bob"><span class="hero-3d__in hero-3d__in--accent"><span class="hero-3d__l" style="--j:2">,</span></span></span></span> <span class="hero-3d__w" style="--i:2;--d:0.5"><span class="hero-3d__bob"><span class="hero-3d__in"><span class="hero-3d__l" style="--j:3">i</span> <span class="hero-3d__l" style="--j:4">a</span><span class="hero-3d__l" style="--j:5">m</span></span></span></span> <br><span class="hero-3d__w" style="--i:3;--d:1"><span class="hero-3d__bob"><span class="hero-3d__in hero-3d__in--name"><span class="hero-3d__l" style="--j:6">A</span><span class="hero-3d__l" style="--j:7">t</span><span class="hero-3d__l" style="--j:8">u</span><span class="hero-3d__l" style="--j:9">l</span></span></span></span><br> <span class="hero-3d__w" style="--i:4;--d:1"><span class="hero-3d__bob"><span class="hero-3d__in hero-3d__in--name"><span class="hero-3d__l" style="--j:10">R</span><span class="hero-3d__l" style="--j:11">a</span><span class="hero-3d__l" style="--j:12">t</span><span class="hero-3d__l" style="--j:13">h</span><span class="hero-3d__l" style="--j:14">o</span><span class="hero-3d__l" style="--j:15">d</span></span></span></span> <span class="hero-3d__w" style="--i:5;--d:0.85"><span class="hero-3d__bob"><span class="hero-3d__in hero-3d__in--accent"><span class="hero-3d__l" style="--j:16">.</span></span></span></span></h2>
+                        <p>Senior Fullstack Software Engineer</p>
                         <div class="hero-actions">
                             <a class="hero-cta" href="assets/download/AtulRathod_Fullstack_Resume.pdf"
                                 target="_blank" download>download resume</a>
@@ -222,7 +237,7 @@
                     <div class="col-sm-6">
                         <div class="single-about-txt">
                             <h3>
-                                I am a Professional UI/UX Designer and Web developer. 11 years of experience in
+                                I am a Professional Senior Fullstack Software Engineer. 11 years of experience in
                                 delivering solutions for simple to complex projects.
                             </h3>
                             <p>
@@ -518,7 +533,7 @@
                                                 </h4>
                                                 <h5>USA</h5>
                                                 <p class="description">
-                                                    Angular, React, Redux, Flux, Angular TestCases, SAP Hybris frontend,
+                                                    Agentic AI, Spring boot Kafka, React, Next.js, Redux, Angular, TestCases, SAP Hybris frontend,
                                                     SAP Back Office, Training on SAP Spartacus, Javascript, JSP, SAP
                                                     Hybris.
                                                 </p>
@@ -1284,7 +1299,7 @@ var base="https://design.designhunk.com";
                             <div class="contact-adress">
                                 <div class="contact-add-head">
                                     <h3>Atul Rathod</h3>
-                                    <p>uI/uX designer and Web Developer</p>
+                                    <p>Senior Fullstack Software Engineer</p>
                                 </div>
                                 <div class="contact-add-info">
                                     <div class="single-contact-add-info">
@@ -1405,6 +1420,15 @@ var base="https://design.designhunk.com";
         CSS-parallax fallback driver (which bails when WebGL took over).-->
     <script src="assets/js/three.min.js"></script>
     <script src="assets/js/astra3d.js"></script>
+    <!--hero text 3D: CSS-first entrance + pointer-driven depth (hero3d.js)-->
+    <script src="assets/js/hero3d.js"></script>
+    <!--WebGL character typing for the hero name (typing3d.js): a real Three.js
+        scene of per-glyph textured meshes, stamped in 3-D as hero3d.js types the
+        headline. Loaded AFTER hero3d.js so it can read hero3d.js's state hooks;
+        it bails out (no canvas, no WebGL) under ?motion=reduce / ?three=off, when
+        THREE or WebGL is missing, and hands the hero straight back to the CSS
+        headline on any renderer failure.-->
+    <script src="assets/js/typing3d.js"></script>
     <script src="assets/js/parallax3d.js"></script>
     <!-- <script>
 function ww() {
