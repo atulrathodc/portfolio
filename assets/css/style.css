@@ -1291,174 +1291,34 @@ nav.navbar.bootsnav .navbar-toggle i {
     50%      { opacity: 1;    transform: scale(1.2); }
 }
 
-/* ---- 3-D hero headline ("i am Atul Rathod") --------------------------------
-   Layer model, one group of nested spans per word / letter (see index.html):
-     .hero-3d__w    word   -> one-shot entrance gather (transform + opacity)
-     .hero-3d__bob  word   -> continuous idle float (rotateX/rotateY/translateZ)
-     .hero-3d__in   word   -> word paint + pointer depth (parallax by --d)
-     .hero-3d__l    letter -> own TYPED entrance (hero-3d-type-in, started by
-                             hero3d.js the moment the character is written),
-                             idle wave and gradient slice. --j is the GLOBAL
-                             letter index: it staggers the sheen sweep and each
-                             glyph parallaxes deeper than its word.
-   The <h2> itself only carries the pointer tilt (and anchors the typing caret).
-   Every animated property is transform / opacity / filter / background-position,
-   so no layout box changes and the CTA row below never moves. hero3d.js adds
-   `.hero-3d-in` (reveal + typing), `.hero-3d__l--typed` (per glyph, in typing
-   order) and `.hero-3d-live` (pointer depth); without JS the headline is plain
-   readable text, and `prefers-reduced-motion` / `?motion=reduce` keeps it fully
-   static. */
-.header-text {
-    /* shared 3-D stage: the words rotate inside this perspective */
-    perspective: 1000px;
-    perspective-origin: 50% 42%;
-    /* 3-D transforms extend the scrollable area - keep them contained */
-    overflow: hidden;
-    /* --- WebGL typed-character layer (assets/js/typing3d.js) --------------
-       The Three.js scene reads these tokens, so the phone breakpoint below can
-       re-time / re-amplitude the WebGL typing by overriding a few values
-       instead of duplicating anything in JS (same idea as the --tl-* typing
-       tokens on the <h2>). */
-    --t3d-stamp: 0.44s;        /* per-glyph 3-D entrance duration            */
-    --t3d-float: 5.2s;         /* per-character idle float period            */
-    --t3d-lift: 140px;         /* how deep a glyph drops in from (px)        */
-    --t3d-depth: 1;            /* idle float + pointer parallax amplitude    */
-    --t3d-caret-hold: 3.4s;    /* rest beat before the hero sits at idle     */
-    --t3d-pixel-ratio: 1;      /* desktop baseline pixel ratio for the 3-D   */
-}
+/* ---- hero headline (static text) -------------------------------------------
+   The headline is plain, un-animated text: no per-letter 3-D entrance, no
+   WebGL typing overlay and no pointer parallax (assets/js/hero3d.js and
+   assets/js/typing3d.js were removed). It renders immediately and stays put -
+   the only styling left below is the type scale, the centring and the paint on
+   the `.hero-name` spans. */
 
-/* typing3d.js adds `.typing3d-host` so this container becomes the positioning
-   context for the WebGL canvas: `position: relative` moves nothing (the div is
-   already a static block), it only anchors the overlay. */
-.header-text.typing3d-host {
-    position: relative;
-}
-
-/* the WebGL typed-character canvas: pinned exactly over the <h2> box by JS (the
-   inline left/top/width/height are the headline's measured layout box). It is
-   decorative - pointer-events:none keeps the page clickable/selectable through
-   it and it is aria-hidden - and it carries the same drop-shadow bloom as the
-   name, so the two layers look like one layer across the hand-over. Its opacity
-   transition IS the fade-in / fade-out of the WebGL typing. */
-.header-text .typing3d-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 2;
+/* ---- headline centring (the block that must stay in the middle) -----------
+   The <h2 class="hero-title"> is a THREE-LINE centred block
+   ("hi, i am" / "Atul" / "Rathod ."). Pinning the alignment (and symmetric
+   inline margins, capped to the container) on the heading itself makes every
+   line share the SAME centred axis instead of inheriting the aligned box of
+   the Bootstrap `.text-center` column, whose line box is not necessarily
+   symmetric for the shorter lines.
+   This is STATIC layout - nothing here is ever toggled. */
+.hero-title {
     display: block;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.45s ease;
-    filter: drop-shadow(0 6px 22px rgba(34, 211, 238, 0.3))
-        drop-shadow(0 2px 12px rgba(139, 92, 246, 0.36));
+    width: 100%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    text-indent: 0;
 }
 
-.header-text .typing3d-canvas.typing3d-canvas--on {
-    opacity: 1;
-}
-
-/* While the WebGL layer paints the headline the CSS glyphs are held invisible
-   with OPACITY ONLY - never display/visibility/layout - so the headline keeps
-   its exact box: nothing reflows, the copy under it and the CTA row cannot move.
-   The selectors are deliberately as specific as hero3d.js's `.hero-3d__l--typed`
-   rule so both the typed and the not-yet-typed glyphs are covered.
-   typing3d.js drops this class again the moment the WebGL layer stops, so the
-   CSS/hero3d.js headline always remains the fallback. */
-.header-text h2.typing3d-active .hero-3d__l,
-.header-text h2.typing3d-active .hero-3d__l.hero-3d__l--typed {
-    opacity: 0;
-}
-
-/* Defensive fallback: the JS gate in typing3d.js already bails out under reduced
-   motion, so this should never be needed - but if it is, the canvas stays hidden
-   and the CSS headline is pinned fully visible. */
-@media (prefers-reduced-motion: reduce) {
-    .header-text .typing3d-canvas {
-        display: none !important;
-        opacity: 0 !important;
-    }
-
-    .header-text h2.typing3d-active .hero-3d__l,
-    .header-text h2.typing3d-active .hero-3d__l.hero-3d__l--typed {
-        opacity: 1 !important;
-    }
-}
-
-/* Motion tokens for the per-letter cascade. They live on the stage (not inline
-   in the rules below) so the phone breakpoint in responsive.css can re-time the
-   whole cascade by overriding a few values instead of duplicating keyframes. */
-.header-text h2 {
-    --tl-word-step: 60ms;      /* per-word gather cascade step                  */
-    --tl-word-delay: 60ms;     /* when the first word starts                    */
-    /* --- TYPING schedule (read back by hero3d.js, see section 1 there) -----
-       The glyphs no longer cascade from one CSS delay list: hero3d.js types
-       them one at a time and each glyph's own 3-D entrance starts the moment
-       it is written. These tokens are the single source of the cadence, so the
-       phone breakpoint in responsive.css re-times the typing by overriding
-       them (no schedule duplicated in JS and no keyframes duplicated). */
-    --tl-step: 78ms;           /* per-glyph typing step                         */
-    --tl-in: 0.34s;            /* per-glyph 3-D entrance duration               */
-    --tl-in-delay: 220ms;      /* lead-in beat before the first glyph           */
-    --tl-pause-word: 150ms;    /* extra beat at a space / word boundary         */
-    --tl-pause-line: 260ms;    /* extra beat when a new line starts (the <br>)  */
-    --tl-type-blur: 4px;       /* motion blur while a glyph is being stamped    */
-    --tl-caret-rest: 3400ms;   /* caret blink-hold after the last glyph         */
-    --tl-ease: cubic-bezier(0.22, 0.72, 0.24, 1);
-    --tl-wave: 3.8s;           /* letter idle wave period                       */
-    --tl-wave-gap: 1080ms;     /* wave starts once the entrance has landed      */
-    --tl-sheen: 6.5s;          /* specular sweep period (accent + name)         */
-    --tl-sheen-delay: 760ms;   /* sweep starts once the glyph has been typed    */
-    --tl-sheen-step: -180ms;   /* negative: the highlight travels letter to letter */
-}
-
-.header-text h2 {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(2.3rem, 6.4vw, 4.5rem);
-    line-height: 1.06;
-    letter-spacing: -0.015em;
-    color: #ffffff;
-    text-shadow: 0 14px 44px rgba(0, 0, 0, 0.55), 0 0 30px rgba(34, 211, 238, 0.14);
-    transform-style: preserve-3d;
-    transform: rotateX(var(--hero-rx, 0deg)) rotateY(var(--hero-ry, 0deg));
-    transform-origin: 50% 50%;
-    /* the typing caret is an absolutely positioned child of the heading, so
-       `relative` makes <h2> its containing block - and the glyphs' offsetParent,
-       which is how hero3d.js measures the insertion point (offsetLeft/offsetTop
-       are transform-immune, so the caret never jitters with the glyph flips).
-       It changes no layout box: the heading already establishes a containing
-       block through its transform. */
-    position: relative;
-    will-change: transform;
-}
-
-.header-text h2 .hero-3d__w,
-.header-text h2 .hero-3d__bob,
-.header-text h2 .hero-3d__in,
-.header-text h2 .hero-3d__l {
-    display: inline-block;
-    transform-style: preserve-3d;
-}
-
-/* per-letter stage: a glyph is its own inline-block box, so it can flip and
-   wave on its own without ever changing a layout box. backface-visibility
-   hides the mirrored glyph while its entrance flip is past 90deg. The
-   background-position below is the letter's slice of the aurora ramp and is
-   harmless on the non-gradient words. */
-.header-text h2 .hero-3d__l {
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    background-position: calc(var(--j, 0) * 24%) 50%;
-}
-
-/* gradient-lit glyphs: the punctuation accents and the name share the aurora
-   gradient. The paint lives on the LETTER glyphs - an inline-block child cannot
-   use its parent's `background-clip:text` clip - and each glyph starts one
-   slice further along the ramp (background-position from --j, above), so a word
-   still reads as ONE continuous gradient while every letter stays free to move
-   and the sweep can travel glyph by glyph. */
-.header-text h2 .hero-3d__in--accent .hero-3d__l,
-.header-text h2 .hero-3d__in--name .hero-3d__l {
+/* The name keeps the aurora paint it always had, but PAINT ONLY: no transform,
+   no animation, nothing that moves or delays it. */
+.hero-title .hero-name {
     background-image: linear-gradient(115deg,
             #67e8f9 0%, #22d3ee 15%, #ecfeff 30%, #a78bfa 52%,
             #8b5cf6 68%, #d946ef 86%, #22d3ee 100%);
@@ -1467,164 +1327,50 @@ nav.navbar.bootsnav .navbar-toggle i {
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
-}
-
-/* the name gets the specular sweep + a soft cyan/violet bloom */
-.header-text h2 .hero-3d__in--name {
     filter: drop-shadow(0 6px 22px rgba(34, 211, 238, 0.3)) drop-shadow(0 2px 12px rgba(139, 92, 246, 0.36));
 }
 
-/* the sweep starts at each letter's own slice of the ramp, so the highlighted
-   band runs across the word instead of flashing as one block */
-@keyframes hero-3d-sheen {
-    0%   { background-position: calc(var(--j, 0) * 24%) 50%; }
-    50%  { background-position: calc(var(--j, 0) * 24% + 100%) 50%; }
-    100% { background-position: calc(var(--j, 0) * 24%) 50%; }
+/* The template's custom.js applies animate.css `animated fadeInUp` plus an
+   inline `opacity: 0` to `.header-text h2` on window load. The hero headline is
+   static text now, so that entrance is cancelled here and the inline opacity is
+   released: the copy is painted at full opacity with the page and can never be
+   left invisible if the animation does not run. */
+.header-text h2.animated {
+    animation: none !important;
+    opacity: 1 !important;
 }
 
-/* entrance, LETTER level (the TYPED stamp): hero3d.js adds `.hero-3d__l--typed`
-   to a glyph the moment it is "written" and this keyframe fires immediately, so
-   the character is stamped out of the depth plane on its own axis - it swings
-   in from a ~70deg yaw and ~58deg pitch in Z-depth, slightly blurred and
-   scaled down, overshoots, then settles crisp and flat. `backwards` fill only -
-   the settled state is never pinned, so the idle wave and the pointer parallax
-   keep working once it lands, and no filter layer is left behind after the
-   entrance (the 100% frame's blur(0px) simply hands back to `none`).
-   The typing cadence itself lives in hero3d.js (see the --tl-* typing tokens);
-   --tl-type-blur lets the phone breakpoint soften the motion blur. */
-@keyframes hero-3d-type-in {
-    0% {
-        opacity: 0;
-        filter: blur(var(--tl-type-blur, 4px));
-        transform: translate3d(0, 0.28em, -140px)
-            rotateX(-58deg) rotateY(-70deg) scale(0.62);
-    }
-    55% {
-        opacity: 1;
-    }
-    76% {
-        filter: blur(0px);
-        transform: translate3d(0, -0.05em, 16px)
-            rotateX(9deg) rotateY(7deg) scale(1.07);
-    }
-    100% {
-        opacity: 1;
-        filter: blur(0px);
-        transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) scale(1);
-    }
+.header-text {
+    /* the hero type band. No 3-D transforms any more (the headline is static),
+       but keep the clip so the display type can never widen the page. */
+    overflow: hidden;
 }
 
-/* entrance, WORD level: the word itself only eases out of the depth plane and
-   fades in (a shallow group gather) - the drama is per letter now, so the two
-   composed rotations never tumble past ~110deg. */
-@keyframes hero-3d-gather {
-    0% {
-        opacity: 0;
-        transform: translate3d(0, 22px, -110px) rotateX(-16deg);
-    }
-    55% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 1;
-        transform: translate3d(0, 0, 0) rotateX(0deg);
-    }
+.header-text h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    /* explicit centring of the headline block (see `.hero-title` above): the
+       heading owns the centred line box for all three lines instead of
+       inheriting the column's text-align. Static layout only - the headline is
+       never transformed, promoted or animated. */
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    text-indent: 0;
+    font-size: clamp(2.3rem, 6.4vw, 4.5rem);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    color: #ffffff;
+    text-shadow: 0 14px 44px rgba(0, 0, 0, 0.55), 0 0 30px rgba(34, 211, 238, 0.14);
 }
 
-@keyframes hero-3d-float {
-    0%, 100% { transform: rotateX(0deg) rotateY(0deg) translate3d(0, 0, 0); }
-    33%      { transform: rotateX(2.4deg) rotateY(-2.8deg) translate3d(0, -3px, 10px); }
-    66%      { transform: rotateX(-2deg) rotateY(2.4deg) translate3d(0, 2px, -8px); }
-}
-
-/* idle, LETTER level: a slow sine-ish wave. The staggered delays below put
-   every glyph out of phase, so the headline ripples instead of pulsing as a
-   block. The pointer-depth tokens are folded into the same transform at 2.1x
-   the word's depth (--d), which is why each letter parallaxes deeper than its
-   word while it waves. Only transform/opacity animate: no repaint of layout. */
-@keyframes hero-3d-letter-wave {
-    0%, 100% {
-        transform: translate3d(calc(var(--hero-mx, 0) * var(--d, 1) * 2.1 * 1px),
-                calc(var(--hero-my, 0) * var(--d, 1) * 2.1 * 1px),
-                calc(var(--hero-mz, 0) * var(--d, 1) * 2.4 * 1px));
-    }
-    50% {
-        transform: translate3d(calc(var(--hero-mx, 0) * var(--d, 1) * 2.1 * 1px),
-                calc(var(--hero-my, 0) * var(--d, 1) * 2.1 * 1px - 3px),
-                calc(var(--hero-mz, 0) * var(--d, 1) * 2.4 * 1px + 10px))
-            rotateX(2.6deg) rotateY(-2.4deg);
-    }
-}
-
-/* per-word entrance: staggered by the authored --i index */
-.header-text.hero-3d-in .hero-3d__w {
-    animation: hero-3d-gather 1s cubic-bezier(0.22, 0.8, 0.28, 1) backwards;
-    animation-delay: calc(var(--i, 0) * var(--tl-word-step) + var(--tl-word-delay));
-}
-
-/* per-word idle float (a different element from the word entrance, so the two
-   transforms never fight; its own 7.5s period keeps it out of sync with the
-   letter wave and the result reads organic) */
-.header-text.hero-3d-in .hero-3d__bob {
-    animation: hero-3d-float 7.5s ease-in-out infinite;
-    animation-delay: calc(var(--i, 0) * 260ms + 1100ms);
-}
-
-/* a glyph that has NOT been typed yet: held invisible with opacity only - it
-   keeps its layout box, so the headline never reflows as the characters arrive
-   and the CTA row below never moves. hero3d.js adds `.hero-3d__l--typed` to a
-   glyph exactly when the character is written. */
-.header-text.hero-3d-in .hero-3d__l {
-    opacity: 0;
-}
-
-/* per-LETTER, TYPED: the class is added by the typing loop, so both animations
-   start at the glyph's own typed moment (entrance delay 0). Both animate
-   `transform`, so the wave delay is deliberately POSITIVE (entrance duration +
-   a small gap): the two never overlap, so there is no fill-mode fight and no
-   flash of the settled state. --i still drives the word gather slot and --d
-   the word depth; the per-glyph order is now the typing order itself. */
-.header-text.hero-3d-in .hero-3d__l.hero-3d__l--typed {
-    opacity: 1;
-    animation-name: hero-3d-type-in, hero-3d-letter-wave;
-    animation-duration: var(--tl-in), var(--tl-wave);
-    animation-timing-function: var(--tl-ease), ease-in-out;
-    animation-iteration-count: 1, infinite;
-    animation-fill-mode: backwards, none;
-    animation-delay: 0s, var(--tl-wave-gap);
-}
-
-/* accent + name letters additionally carry the specular sweep, so the highlight
-   runs along the name once the glyph has been typed. The sweep is staggered
-   glyph by glyph with a negative --j stagger: this animation only moves a
-   background gradient (paint), never the transform, so it may overlap the
-   entrance without disturbing it. */
-.header-text.hero-3d-in .hero-3d__in--accent .hero-3d__l.hero-3d__l--typed,
-.header-text.hero-3d-in .hero-3d__in--name .hero-3d__l.hero-3d__l--typed {
-    animation-name: hero-3d-type-in, hero-3d-letter-wave, hero-3d-sheen;
-    animation-duration: var(--tl-in), var(--tl-wave), var(--tl-sheen);
-    animation-timing-function: var(--tl-ease), ease-in-out, ease-in-out;
-    animation-iteration-count: 1, infinite, infinite;
-    animation-fill-mode: backwards, none, none;
-    animation-delay: 0s, var(--tl-wave-gap),
-        calc(var(--j, 0) * var(--tl-sheen-step) + var(--tl-sheen-delay));
-}
-
-/* pointer depth: hero3d.js eases --hero-mx/my/mz toward the pointer over the
-   section; each word moves by its authored depth token (--d). */
-.header-text.hero-3d-live .hero-3d__in {
-    transform: translate3d(calc(var(--hero-mx, 0) * var(--d, 1) * 1px),
-            calc(var(--hero-my, 0) * var(--d, 1) * 1px),
-            calc(var(--hero-mz, 0) * var(--d, 1) * 1px));
-}
-
-/* ---- no typing caret -------------------------------------------------------
-   "keep only charector, do not add bar while typing animation": the headline
-   types character by character and NOTHING else is drawn - no insertion bar,
-   no blinking cursor. hero3d.js / typing3d.js create no caret node and pin the
-   `data-*-caret` hooks to 'off', so no caret rules (and no blink keyframes)
-   belong here. The idle wave, the specular sheen and the pointer depth carry
-   all of the motion once the typing has landed. */
+/* (The per-glyph hero animation used to live here: word gather, per-letter
+   3-D type-in, idle float/wave, specular sheen and pointer parallax, driven by
+   hero3d.js + typing3d.js. The headline is plain static text now, those scripts
+   are deleted and none of those keyframes/rules are needed.) */
 
 .header-text p {
     color: rgba(233, 236, 255, 0.75);

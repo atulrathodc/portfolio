@@ -26,7 +26,7 @@
         rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <!-- title of site -->
-    <title>Build Urgent Build Ai Agent</title>
+    <title>Build urgent Build AI Agent</title>
 
     <!-- For favicon png -->
     <link rel="shortcut icon" type="image/icon" href="assets/logo/favicon.png" />
@@ -202,22 +202,22 @@
                     <div class="header-text">
                         <span class="hero-badge"><i class="fa fa-circle" aria-hidden="true"></i> available for
                             freelance work</span>
-                        <!-- 3-D headline. One word per group, FOUR layers each:
-                             .hero-3d__w   = per-word entrance gather (CSS keyframes, --i/--d)
-                             .hero-3d__bob = per-word idle float (rotateX/rotateY/translateZ)
-                             .hero-3d__in  = word paint + pointer depth
-                             .hero-3d__l   = per-LETTER stage: own flip-rise entrance,
-                                             idle wave and gradient slice (--j = global
-                                             letter index, so the cascade flows across the
-                                             whole headline and letters parallax deeper)
-                             The markup is deliberately inline so the accessible text still
-                             reads exactly "hi , i am Atul Rathod ." and the <br> line
-                             structure (3 lines) is unchanged. The letter spans are written
-                             with no whitespace between them (only the real spaces between
-                             words are text nodes) so glyphs keep their kerning-free but
-                             correctly spaced layout. hero3d.js only adds motion classes,
-                             so the headline stays readable with JS disabled. -->
-                        <h2 class="hero-title" aria-label="hi, i am Atul Rathod."><span class="hero-3d__w" style="--i:0;--d:0.5"><span class="hero-3d__bob"><span class="hero-3d__in"><span class="hero-3d__l" style="--j:0">h</span><span class="hero-3d__l" style="--j:1">i</span></span></span></span> <span class="hero-3d__w" style="--i:1;--d:0.85"><span class="hero-3d__bob"><span class="hero-3d__in hero-3d__in--accent"><span class="hero-3d__l" style="--j:2">,</span></span></span></span> <span class="hero-3d__w" style="--i:2;--d:0.5"><span class="hero-3d__bob"><span class="hero-3d__in"><span class="hero-3d__l" style="--j:3">i</span> <span class="hero-3d__l" style="--j:4">a</span><span class="hero-3d__l" style="--j:5">m</span></span></span></span> <br><span class="hero-3d__w" style="--i:3;--d:1"><span class="hero-3d__bob"><span class="hero-3d__in hero-3d__in--name"><span class="hero-3d__l" style="--j:6">A</span><span class="hero-3d__l" style="--j:7">t</span><span class="hero-3d__l" style="--j:8">u</span><span class="hero-3d__l" style="--j:9">l</span></span></span></span><br> <span class="hero-3d__w" style="--i:4;--d:1"><span class="hero-3d__bob"><span class="hero-3d__in hero-3d__in--name"><span class="hero-3d__l" style="--j:10">R</span><span class="hero-3d__l" style="--j:11">a</span><span class="hero-3d__l" style="--j:12">t</span><span class="hero-3d__l" style="--j:13">h</span><span class="hero-3d__l" style="--j:14">o</span><span class="hero-3d__l" style="--j:15">d</span></span></span></span> <span class="hero-3d__w" style="--i:5;--d:0.85"><span class="hero-3d__bob"><span class="hero-3d__in hero-3d__in--accent"><span class="hero-3d__l" style="--j:16">.</span></span></span></span></h2>
+                        <!-- Hero headline: plain, static, semantic text.
+                             Deliberately NO animation - no per-letter 3-D
+                             entrance, no WebGL typing overlay and no pointer
+                             parallax (the old per-letter entrance and WebGL
+                             typing scripts are gone): the
+                             copy is readable the instant the page paints and it
+                             never moves.
+                             The three authored lines (hi, i am / Atul / Rathod
+                             .) are kept with <br> so the centred block and the
+                             copy are unchanged, and the aria-label matches the
+                             visible text exactly. The two name lines keep their
+                             aurora gradient through `.hero-name` - that is
+                             PAINT ONLY (CSS, static), not an animation. -->
+                        <h2 class="hero-title" aria-label="Atul Rathod."><span
+                                class="hero-name">Atul</span><span class="hero-name"> Rathod</span> 
+                        </h2>
                         <p>Senior Fullstack Software Engineer</p>
                         <div class="hero-actions">
                             <a class="hero-cta" href="assets/download/AtulRathod_Fullstack_Resume.pdf"
@@ -1352,18 +1352,12 @@ var base="https://design.designhunk.com";
     <script src="assets/js/custom.js"></script>
 
     <!--3D background: vendored Three.js r128 + the Astra WebGL scene, then the
-        CSS-parallax fallback driver (which bails when WebGL took over).-->
+        CSS-parallax fallback driver (which bails when WebGL took over).
+        The hero HEADLINE is deliberately NOT animated and has no script of its
+        own any more (the per-letter and WebGL typing layers were removed): it is
+        plain static text. Only the background stage above is scripted.-->
     <script src="assets/js/three.min.js" defer></script>
     <script src="assets/js/astra3d.js" defer></script>
-    <!--hero text 3D: CSS-first entrance + pointer-driven depth (hero3d.js)-->
-    <script src="assets/js/hero3d.js"></script>
-    <!--WebGL character typing for the hero name (typing3d.js): a real Three.js
-        scene of per-glyph textured meshes, stamped in 3-D as hero3d.js types the
-        headline. Loaded AFTER hero3d.js so it can read hero3d.js's state hooks;
-        it bails out (no canvas, no WebGL) under ?motion=reduce / ?three=off, when
-        THREE or WebGL is missing, and hands the hero straight back to the CSS
-        headline on any renderer failure.-->
-    <script src="assets/js/typing3d.js" defer></script>
     <script src="assets/js/parallax3d.js"></script>
     <!-- <script>
 function ww() {
