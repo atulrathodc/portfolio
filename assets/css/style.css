@@ -2594,3 +2594,84 @@ nav.navbar.bootsnav ul.nav > li.nav-whatsapp > a:focus .whatsapp-cta,
 nav.navbar.bootsnav ul.nav > li.nav-whatsapp > a:focus-visible .whatsapp-cta {
     box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.55), 0 8px 26px rgba(37, 211, 102, 0.5);
 }
+
+/* ---------------------------------------------
+   Slideable "Share" widget — right-edge heart toggle tab + slide-out panel
+   with social share links (rendered by jsSocials into #share-socials).
+--------------------------------------------- */
+.share-widget {
+    position: fixed;
+    right: 0;
+    top: 64%;
+    transform: translateY(-50%);
+    z-index: 9999;
+}
+
+.share-widget-toggle {
+    writing-mode: vertical-rl;
+    padding: 10px 6px;
+    background-color: #1da1f2;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px 0 0 6px;
+    transition: transform 0.3s ease;
+}
+
+.share-widget-panel {
+    display: none;
+    position: fixed;
+    right: 0;
+    top: 64%;
+    transform: translateY(-50%);
+    width: 300px;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px 0 0 8px;
+}
+
+.share-widget.open .share-widget-panel {
+    display: block;
+    animation: demo-widget-slide-in 0.3s ease;
+}
+
+.share-widget.open .share-widget-toggle {
+    transform: translateX(-300px);
+}
+
+.share-widget__socials {
+    margin-top: 14px;
+}
+
+.share-widget__socials .jssocials-share {
+    margin: 0 0 8px;
+}
+
+.share-widget__socials .jssocials-share-link {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    color: #fff !important;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.03em;
+    transition: opacity 0.2s ease;
+}
+
+.share-widget__socials .jssocials-share-link:hover,
+.share-widget__socials .jssocials-share-link:focus {
+    opacity: 0.85;
+    color: #fff !important;
+}
+
+@keyframes demo-widget-slide-in {
+    from { transform: translateX(100%); opacity: 0; }
+    to   { transform: translateX(0);    opacity: 1; }
+}

@@ -201,3 +201,26 @@
 	}
 }/*max-width:480px*/
 
+/* ---------------------------------------------
+   Slideable "Share" widget — responsive overrides.
+--------------------------------------------- */
+@media screen and (max-width:768px){
+	.share-widget-panel{
+		width: 260px;
+		padding: 16px;
+	}
+	.share-widget.open .share-widget-toggle{
+		transform: translateX(-260px);
+	}
+}/*max-width:768px*/
+
+@media screen and (max-width:480px){
+	.share-widget-panel{
+		width: 240px;
+		padding: 14px;
+	}
+	.share-widget.open .share-widget-toggle{
+		transform: translateX(-240px);
+	}
+}/*max-width:480px*/
+

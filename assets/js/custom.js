@@ -45,9 +45,25 @@ $(document).ready(function(){
 		$('li.smooth-menu a').bind("click", function(event) {
 			event.preventDefault();
 			var anchor = $(this);
-			$('html, body').stop().animate({
-				scrollTop: $(anchor.attr('href')).offset().top - 0
-			}, 1200,'easeInOutExpo');
+			var target = document.querySelector(anchor.attr('href'));
+			if (!target) {
+				return;
+			}
+			// Compensate for the fixed/sticky header so the section doesn't
+			// land hidden underneath it (native smooth scroll, no easing
+			// plugin required unlike the old 'easeInOutExpo' approach).
+			var offset = 0;
+			if ($('.header-area').outerHeight) {
+				offset = $('.header-area').outerHeight();
+			}
+			if (!offset || offset < 60) {
+				offset = 70;
+			}
+			var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+			if (top < 0) {
+				top = 0;
+			}
+			window.scrollTo({ top: top, behavior: 'smooth' });
 		});
 		
 		$('body').scrollspy({
@@ -80,6 +96,47 @@ $(document).ready(function(){
 
 
     // 5. welcome animation support
+
+        $(document).on('click', '.share-widget-toggle', function () {
+            $(this).closest('.share-widget').toggleClass('open');
+            return false;
+        });
+
+        // jsSocials (third-party jQuery share plugin) — renders the share buttons
+        // inside #share-socials. Client-side only; each network builds its own share
+        // URL from the live page URL and opens in a new tab. Must run after jQuery +
+        // the jsSocials script. Wrapped in try/catch so a CDN hiccup never breaks the
+        // rest of the page.
+        //
+        // LinkedIn is OVERRIDDEN here (not jsSocials' built-in network): jsSocials
+        // 1.5.0's built-in handler builds the DEPRECATED
+        // `https://www.linkedin.com/shareArticle?mini=true&url=...` endpoint, which
+        // LinkedIn no longer honors and opens an EMPTY panel (no title / image / URL
+        // preview). The modern endpoint only takes a `url` parameter:
+        // `https://www.linkedin.com/sharing/share-offsite/?url=<encodedUrl>`.
+        // Because the custom entry keeps `share: 'linkedin'`, jsSocials still emits
+        // `.jssocials-share-linkedin`, so the flat-theme styling still applies.
+        if ($('#share-socials').length) {
+            try {
+                $('#share-socials').jsSocials({
+                    showLabel: false,
+                    showCount: false,
+                    shares: [
+                        { share: 'twitter', label: 'X / Twitter' },
+                        { share: 'facebook', label: 'Facebook' },
+                        {
+                            share: 'linkedin',
+                            label: 'LinkedIn',
+                            logo: 'fa fa-linkedin',
+                            shareUrl: function () {
+                                return 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(window.location.href);
+                            }
+                        },
+                        { share: 'whatsapp', label: 'WhatsApp' }
+                    ]
+                });
+            } catch (e) { /* jsSocials unavailable; share buttons simply not rendered */ }
+        }
 
         $(window).load(function(){
         	$(".header-text h2,.header-text p").removeClass("animated fadeInUp").css({'opacity':'0'});
