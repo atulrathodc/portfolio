@@ -46,7 +46,7 @@ STARTED_AT = time.time()
 PROFILE = {
     "name": "Atul Rathod",
     "role": "Fullstack Developer",
-    "site": "https://atulrathodc.github.io/portfolio/",
+    "site": "https://github.com/atulrathodc",
     "resume": "assets/download/AtulRathod_Fullstack_Resume.pdf",
 }
 

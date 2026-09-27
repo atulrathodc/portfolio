@@ -12,10 +12,10 @@
 	box-sizing:border-box;
 }
 body{
-	font-family: 'Poppins', sans-serif;
+	font-family: var(--font-body, 'Inter', 'Poppins', sans-serif);
 	font-size:16px;
-	color: #676a81;
-	background: #fff;
+	color: var(--text, #e9ecff);
+	background: var(--bg-0, #05060f);
     max-width:1920px;
     margin:0 auto;
 	overflow-x:hidden;
@@ -39,19 +39,26 @@ a:hover,
 a:active,
 a:focus {
 	text-decoration:none;
-	color: #6a708e;
+	color: var(--accent, #22d3ee);
 	font-size:16px;
 	padding:0;
 }
+a:hover,
+a:focus {
+	color: #7dd3fc;
+}
 h1,h2,h3,h4,h5,h6 { 
 	margin: 0;
-	color:#43485c;
+	color:var(--text, #e9ecff);
     font-size: 16px;
-	font-family: 'Poppins', sans-serif;
+	font-family: var(--font-display, 'Space Grotesk', 'Poppins', sans-serif);
 	text-transform: capitalize;
+	letter-spacing: -0.01em;
 }
 p {
 	margin: 0;
+	color: var(--text-muted, #a7b0d0);
+}
 	line-height:1.8;
 	color:#43485c;
 	font-size:14px;
@@ -714,14 +721,14 @@ span.single-timeline-horizontal.spacial-horizontal-line {width: 88px;}
     
 }
 .contact-form .form-control {
-    padding: 25px;
+    padding: 20px;
     font-size: 14px;
-    border: 1px solid #fff;
-    border-radius: 0px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
     box-shadow: none;
     outline: 0!important;
-    background: #fff;
-    color: #636a82;
+    background: var(--bg-1);
+    color: var(--text);
     resize: none;
 }
 
@@ -733,35 +740,35 @@ span.single-timeline-horizontal.spacial-horizontal-line {width: 88px;}
     height:50px;
     text-transform:capitalize;
     margin-top: 3px;
-    background: #b636ff;
-    border: 1px solid #b636ff;
+    background: var(--grad);
+    border: 1px solid transparent;
     cursor:pointer;
-    box-shadow: 0 5px 20px rgba(0,0,0,.2);
-     -webkit-transition: .5s; 
-    -moz-transition:.5s; 
-    -ms-transition:.5s; 
-    -o-transition:.5s;
-    transition: .5s;
+    box-shadow: var(--sh-sm);
+    border-radius: var(--r-pill);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 .contact-form .single-contact-btn .contact-btn ,
 .contact-form .single-contact-btn .contact-btn:focus {
     margin-top:0px;
     outline: 0 !important;
     border:0;
-    color: #fff;
-    border-radius: 0px;
+    color: #05060f;
+    border-radius: var(--r-pill);
     font-size:14px;
-    -webkit-transition: .5s; 
-    -moz-transition:.5s; 
-    -ms-transition:.5s; 
-    -o-transition:.5s;
-    transition: .5s;
-    
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: box-shadow 0.3s ease, color 0.2s ease;
 }
 .single-contact-btn:hover{
-    background: #9f00ff;
-    border: 1px solid #9f00ff;
-    box-shadow: 0 5px 20px rgba(0,0,0,.2);
+    box-shadow: var(--sh-glow);
+    border-color: var(--accent);
+}
+.contact-form .single-contact-btn .contact-btn:hover,
+.contact-form .single-contact-btn .contact-btn:focus:hover {
+    box-shadow: var(--sh-glow-strong);
+    color: #05060f;
 }
 
 /*--contct button--*/
@@ -774,41 +781,50 @@ span.single-timeline-horizontal.spacial-horizontal-line {width: 88px;}
 .contact-add-head p {
     font-size:  16px;
     text-transform: capitalize;
-    color:  #636a82;
-    font-weight:  300;
+    color: var(--text-muted);
+    font-weight:  400;
     margin-top:  6px;
 }
 /* contact-adress */
 
 /*.contact-add-info */
-.contact-add-info { margin: 42px 0 52px;}
+.contact-add-info { margin: var(--sp-5) 0 var(--sp-6);}
 .single-contact-add-info h3 {
-    color:  #636a82;
-    font-weight:  500;
+    color: var(--accent);
+    font-weight:  600;
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
 }
 .single-contact-add-info p {
-    color:  #999fb3;
-    font-size:  16px;
-    margin-top:  18px;
+    color: var(--text-muted);
+    font-size:  15px;
+    margin-top:  10px;
+    line-height: 1.6;
 }
 .single-contact-add-info {
-    margin-bottom:  26px;
+    margin-bottom:  var(--sp-5);
 }
 /*.contact-add-info */
 
 /*hm-foot-icon*/
 .hm-foot-icon {
-   
+    text-align: center;
 }
-.hm-foot-icon ul li{float:left;}
+.hm-foot-icon ul li{float:none; display:inline-block; margin: 0 var(--sp-2);}
 .hm-foot-icon ul li>a {
-    color: #636a82;
-    margin-right:18px;
+    color: var(--text-dim);
+    font-size: 18px;
+    margin-right:0;
     -webkit-transition: .3s; 
     -moz-transition:.3s; 
     -ms-transition:.3s; 
     -o-transition:.3s;
     transition: .3s;
+}
+.hm-foot-icon ul li>a:hover{
+    color: var(--accent);
 }
 .hm-foot-icon ul li>a:hover{
     color: #b636ff;
@@ -1020,25 +1036,25 @@ a.contact-btn {
 --------------------------------------------- */
 :root {
     /* surfaces */
-    --bg-0: #05060f;
-    --bg-1: #0a0d1f;
-    --bg-2: #111634;
-    --surface: rgba(19, 24, 52, 0.58);
-    --surface-2: rgba(27, 33, 68, 0.72);
-    --border: rgba(146, 160, 255, 0.16);
-    --border-strong: rgba(146, 160, 255, 0.32);
+    --bg-0: #04060e;
+    --bg-1: #080c1c;
+    --bg-2: #0f1329;
+    --surface: rgba(16, 22, 48, 0.65);
+    --surface-2: rgba(22, 30, 62, 0.78);
+    --border: rgba(120, 140, 255, 0.14);
+    --border-strong: rgba(120, 140, 255, 0.30);
 
     /* text */
-    --text: #e9ecff;
-    --text-muted: #a7b0d0;
-    --text-dim: #7c86a8;
+    --text: #e8ecff;
+    --text-muted: #9aa4c4;
+    --text-dim: #6b7598;
 
     /* accents */
     --accent: #22d3ee;
     --accent-2: #8b5cf6;
     --accent-3: #d946ef;
     --accent-soft: #a78bfa;
-    --grad: linear-gradient(120deg, #22d3ee 0%, #8b5cf6 62%, #d946ef 100%);
+    --grad: linear-gradient(135deg, #22d3ee 0%, #8b5cf6 55%, #d946ef 100%);
 
     /* spacing scale (4/8px multiples only) */
     --sp-1: 4px;
@@ -1053,17 +1069,20 @@ a.contact-btn {
 
     /* radii */
     --r-sm: 8px;
-    --r-md: 16px;
-    --r-lg: 24px;
+    --r-md: 14px;
+    --r-lg: 20px;
     --r-pill: 999px;
 
     /* elevation */
-    --sh-sm: 0 6px 18px rgba(0, 0, 0, 0.35);
-    --sh-glow: 0 18px 50px rgba(34, 211, 238, 0.18);
+    --sh-sm: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --sh-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+    --sh-glow: 0 16px 48px rgba(34, 211, 238, 0.15);
+    --sh-glow-strong: 0 24px 64px rgba(34, 211, 238, 0.22);
 
     /* type */
     --font-display: 'Space Grotesk', 'Poppins', -apple-system, 'Segoe UI', Roboto, sans-serif;
     --font-body: 'Inter', 'Poppins', -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
 /* ---------------------------------------------
@@ -1283,12 +1302,6 @@ nav.navbar.bootsnav .navbar-toggle i {
 .hero-badge i {
     font-size: 7px;
     color: #34d399;
-    animation: hero-pulse 2.4s ease-in-out infinite;
-}
-
-@keyframes hero-pulse {
-    0%, 100% { opacity: 0.45; transform: scale(0.8); }
-    50%      { opacity: 1;    transform: scale(1.2); }
 }
 
 /* ---- hero headline (static text) -------------------------------------------
@@ -1370,7 +1383,7 @@ nav.navbar.bootsnav .navbar-toggle i {
 /* (The per-glyph hero animation used to live here: word gather, per-letter
    3-D type-in, idle float/wave, specular sheen and pointer parallax, driven by
    hero3d.js + typing3d.js. The headline is plain static text now, those scripts
-   are deleted and none of those keyframes/rules are needed.) */
+   are deleted.) */
 
 .header-text p {
     color: rgba(233, 236, 255, 0.75);
@@ -2405,16 +2418,11 @@ section.clients {
         animation: none !important;
     }
 
-    /* 3-D hero headline (hero3d.js also bails out): no word gather, no per-letter
-       typed stamp, no idle float, no idle wave, no sheen sweep, no pointer tilt -
-       just fully opaque, un-rotated text at each letter's static gradient slice.
-       hero3d.js also never adds `.hero-3d__l--typed` on this path, so the
-       "not typed yet" opacity:0 above can never hide a glyph. */
-    .header-text h2,
-    .header-text h2 .hero-3d__w,
-    .header-text h2 .hero-3d__bob,
-    .header-text h2 .hero-3d__in,
-    .header-text h2 .hero-3d__l {
+    /* 3-D hero headline removed: the hero headline is plain static text.
+       No word gather, no per-letter typed stamp, no idle float, no
+       idle wave, no sheen sweep, no pointer tilt - just fully opaque,
+       un-rotated text at its static gradient slice. */
+    .header-text h2 {
         animation: none !important;
         -webkit-transform: none !important;
         transform: none !important;
