@@ -1,16 +1,42 @@
 {
   "files": {
-    "main.css": "/static/css/main.e6c13ad2.css",
-    "main.js": "/static/js/main.71f31e0e.js",
-    "static/js/453.927acbb8.chunk.js": "/static/js/453.927acbb8.chunk.js",
-    "static/media/logo.svg": "/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/index.html",
-    "main.e6c13ad2.css.map": "/static/css/main.e6c13ad2.css.map",
-    "main.71f31e0e.js.map": "/static/js/main.71f31e0e.js.map",
-    "453.927acbb8.chunk.js.map": "/static/js/453.927acbb8.chunk.js.map"
+    "assets/css/style.css": "/assets/css/style.css",
+    "assets/css/animate.css": "/assets/css/animate.css",
+    "assets/css/bootsnav.css": "/assets/css/bootsnav.css",
+    "assets/css/flaticon.css": "/assets/css/flaticon.css",
+    "assets/css/parallax3d.css": "/assets/css/parallax3d.css",
+    "assets/css/responsive.css": "/assets/css/responsive.css",
+    "assets/js/custom.js": "/assets/js/custom.js",
+    "assets/js/astra3d.js": "/assets/js/astra3d.js",
+    "assets/js/parallax3d.js": "/assets/js/parallax3d.js",
+    "assets/js/three.min.js": "/assets/js/three.min.js",
+    "assets/js/bootstrap.min.js": "/assets/js/bootstrap.min.js",
+    "assets/js/jquery.js": "/assets/js/jquery.js",
+    "assets/js/jquery.appear.js": "/assets/js/jquery.appear.js",
+    "assets/js/jquery.sticky.js": "/assets/js/jquery.sticky.js",
+    "assets/js/owl.carousel.min.js": "/assets/js/owl.carousel.min.js",
+    "assets/js/progressbar.js": "/assets/js/progressbar.js",
+    "assets/js/bootsnav.js": "/assets/js/bootsnav.js",
+    "assets/download/AtulRathod_Fullstack_Resume.pdf": "/assets/download/AtulRathod_Fullstack_Resume.pdf",
+    "assets/download/PrivacyPolicy.pdf": "/assets/download/PrivacyPolicy.pdf",
+    "assets/download/TermsConditions.pdf": "/assets/download/TermsConditions.pdf",
+    "frontend/index.html": "/frontend/index.html",
+    "frontend/styles.css": "/frontend/styles.css",
+    "frontend/app.js": "/frontend/app.js",
+    "favicon.ico": "/favicon.ico",
+    "logo192.png": "/logo192.png",
+    "logo512.png": "/logo512.png",
+    "manifest.json": "/manifest.json",
+    "robots.txt": "/robots.txt",
+    "CNAME": "/CNAME",
+    "Ads.txt": "/Ads.txt"
   },
   "entrypoints": [
-    "static/css/main.e6c13ad2.css",
-    "static/js/main.71f31e0e.js"
+    "index.html",
+    "assets/css/style.css",
+    "assets/js/custom.js",
+    "assets/js/astra3d.js",
+    "frontend/index.html"
   ]
 }

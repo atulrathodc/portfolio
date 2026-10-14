@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atul Rathod — Portfolio</title>
+  <link rel="stylesheet" href="/frontend/styles.css">
+</head>
+<body>
+  <header class="ph-header">
+    <h1 id="profile-name"></h1>
+    <p class="ph-role" id="profile-role"></p>
+    <p class="ph-title" id="profile-title"></p>
+    <a id="profile-resume" class="ph-btn" target="_blank" rel="noopener">Download Resume</a>
+  </header>
+
+  <main>
+    <section class="ph-section" id="projects-section">
+      <h2 class="ph-section-title">Projects</h2>
+      <div id="project-grid" class="ph-grid"></div>
+      <p id="project-count" class="ph-count"></p>
+    </section>
+
+    <section class="ph-section ph-status-section">
+      <h2 class="ph-section-title">API Status</h2>
+      <div id="health-status"></div>
+    </section>
+  </main>
+
+  <noscript>
+    <div class="ph-noscript">JavaScript is required to load your portfolio data. Please enable it and reload.</div>
+  </noscript>
+
+  <script src="/frontend/app.js" defer></script>
+</body>
+</html>

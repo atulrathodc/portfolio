@@ -1,0 +1,163 @@
+/* ── Reset & base ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #0d1117;
+  color: #c9d1d9;
+  line-height: 1.6;
+  min-width: 320px;
+  overflow-x: hidden;
+}
+
+a { color: #58a6ff; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Header ───────────────────────────────────────────────── */
+.ph-header {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 24px 32px;
+  text-align: center;
+}
+
+.ph-header h1 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  color: #f0f6fc;
+  margin-bottom: 8px;
+}
+
+.ph-role {
+  font-size: clamp(1rem, 2.5vw, 1.35rem);
+  color: #7ee787;
+  margin-bottom: 4px;
+}
+
+.ph-title {
+  font-size: 0.95rem;
+  color: #8b949e;
+  margin-bottom: 20px;
+}
+
+.ph-btn {
+  display: inline-block;
+  padding: 10px 28px;
+  background: #238636;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+
+.ph-btn:hover {
+  background: #2ea043;
+  text-decoration: none;
+}
+
+/* ── Sections ─────────────────────────────────────────────── */
+.ph-section {
+  max-width: 1100px;
+  margin: 0 auto 48px;
+  padding: 0 24px;
+}
+
+.ph-section-title {
+  font-size: 1.5rem;
+  color: #f0f6fc;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #21262d;
+  padding-bottom: 12px;
+}
+
+.ph-count {
+  color: #8b949e;
+  margin-top: 12px;
+  font-size: 0.9rem;
+}
+
+/* ── Project Grid ─────────────────────────────────────────── */
+.ph-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+  gap: 20px;
+}
+
+.ph-card {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ph-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+.ph-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+  background: #0d1117;
+}
+
+.ph-card a.ph-card-link {
+  display: block;
+  padding: 14px 16px;
+  color: #c9d1d9;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.ph-card a.ph-card-link:hover {
+  color: #58a6ff;
+  text-decoration: none;
+}
+
+/* ── Error Banner ─────────────────────────────────────────── */
+.ph-error {
+  background: #3d1414;
+  border: 1px solid #f85149;
+  color: #f85149;
+  padding: 14px 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+  font-size: 0.95rem;
+}
+
+/* ── Status / Health ──────────────────────────────────────── */
+.ph-status-section {
+  max-width: 1100px;
+  margin: 0 auto 48px;
+  padding: 0 24px;
+}
+
+#health-status {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 16px 20px;
+  font-size: 0.9rem;
+}
+
+#health-status .ph-ok { color: #7ee787; }
+#health-status .ph-err { color: #f85149; }
+
+/* ── Noscript ─────────────────────────────────────────────── */
+.ph-noscript {
+  background: #21262d;
+  color: #d2a8ff;
+  padding: 16px 24px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .ph-header { padding: 32px 16px 24px; }
+  .ph-section { padding: 0 16px; margin-bottom: 32px; }
+  .ph-grid { gap: 14px; }
+  .ph-card img { height: 140px; }
+}
